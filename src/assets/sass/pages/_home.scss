@@ -1,0 +1,39 @@
+.main {
+    background-image: linear-gradient(to bottom right, $color-primary, $color-secondary);
+    min-height: 105vh;
+    width: 100%;
+    position: relative;
+    padding: 5% 0;
+}
+
+.questions {
+    display: block;
+    margin: 0 auto;
+    border-radius: 5px;
+    padding-bottom: 3rem;
+    width: 90%;
+    max-width: 135rem;
+    background-color: $color-white;
+    box-shadow: 0 1rem 2.8rem rgba($color-black, 0.15);
+}
+
+.footer {
+    display: block;
+    width: 100%;
+    background-color: $color-secondary;
+    &__link {
+        display: block;
+        width: 20%;
+        margin: 0 auto;
+        padding: 0.4rem;
+        color: $color-white;
+        text-align: center;
+        font-weight: 500;
+        font-size: 1.6rem;
+        cursor: pointer;
+
+        &:hover {
+            color: $color-primary;
+        }
+    }
+}

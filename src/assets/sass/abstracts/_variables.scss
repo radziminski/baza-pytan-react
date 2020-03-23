@@ -1,0 +1,24 @@
+// COLORS
+$color-primary: #a8c0ff;
+$color-secondary: #3f2b96;
+$color-primary-dark: #5f7fd1;
+$color-secondary: rgb(58, 55, 221);
+
+// $color-primary: #30cfd0;
+// $color-secondary: #330867;
+// $color-primary-dark: #30cfd0;
+
+$color-grey-dark: #333;
+$color-white: rgb(255, 255, 255);
+$color-black: #000;
+$color-grey-light: rgba($color-black, 0.05);
+$color-grey: #555;
+
+$gradient-main: linear-gradient(to bottom right, $color-primary, $color-secondary);
+
+// GRID
+$grid-width: 114rem;
+$gutter-vertical: 2rem;
+$gutter-horizontal: 6rem;
+$gutter-section-start: 5rem;
+$gutter-section-end: 11rem;

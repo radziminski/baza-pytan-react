@@ -1,0 +1,113 @@
+.login {
+    width: 90%;
+    max-width: 80rem;
+    margin: 2rem auto;
+    text-align: center;
+
+    &__title {
+        font-size: 3rem;
+        margin-bottom: 4rem;
+    }
+
+    &__btns {
+        display: flex;
+        width: 100%;
+        max-width: 50rem;
+        margin: 0 auto;
+        justify-content: space-around;
+        margin-bottom: 1rem;
+    }
+
+    &__btn {
+        outline: none;
+        border: none;
+        text-decoration: none;
+        background-color: transparent;
+        font: inherit;
+        font-size: 1.8rem;
+        color: $color-grey;
+        margin-bottom: 1.5rem;
+        font-weight: 500;
+        &:after {
+            content: '';
+            display: block;
+            width: 85%;
+            margin: 0 auto;
+            height: 2px;
+            background-color: $color-secondary;
+        }
+        cursor: pointer;
+
+        &--grey {
+            color: rgba($color-grey, 0.7);
+            &:after {
+                background-color: rgba($color-grey, 0.5);
+            }
+        }
+    }
+
+    &__input-box {
+        position: relative;
+        width: 100%;
+        display: block;
+        max-width: 40rem;
+        margin: 2rem auto 5rem auto;
+
+        &:after {
+            position: absolute;
+            display: block;
+            content: '';
+            height: 50%;
+            left: 5.3rem;
+            width: 1px;
+            background-color: rgba($color-grey, 0.6);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        &:last-child {
+            margin-bottom: 3rem;
+        }
+    }
+
+    &__label {
+        position: absolute;
+        left: 0;
+        top: -3.1rem;
+        font-size: 1.7rem;
+        color: rgba($color-grey, 0.8);
+        font-weight: 500;
+    }
+
+    &__input {
+        border: none;
+        outline: none;
+        text-decoration: none;
+        width: 100%;
+        display: block;
+        font: inherit;
+        font-size: 2rem;
+        color: $color-grey;
+        padding: 1rem 2rem 1rem 7rem;
+        border: 2px solid rgba($color-grey, 0.4);
+        border-radius: 5px;
+        box-shadow: 0 0.5rem 1rem rgba($color-black, 0.05);
+        transition: border 0.2s;
+
+        &::placeholder {
+            color: rgba($color-grey, 0.7);
+        }
+
+        &:focus {
+            border: 2px solid rgba($color-primary, 1);
+        }
+    }
+
+    &__icon {
+        position: absolute;
+        left: 1.5rem;
+        top: 50%;
+        color: rgba($color-grey, 0.8);
+        transform: translateY(-50%);
+        font-size: 2.6rem;
+    }
+}

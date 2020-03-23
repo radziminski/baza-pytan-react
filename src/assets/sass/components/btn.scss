@@ -1,0 +1,32 @@
+.btn {
+    display: block;
+    width: 80%;
+    max-width: 30rem;
+    outline: none;
+    text-decoration: none;
+    border: none;
+    margin: 1rem auto;
+    background-image: linear-gradient(to right, $color-primary-dark, $color-secondary);
+    padding: 1.5rem;
+    font-size: 2rem;
+    color: $color-white;
+    border-radius: 4rem;
+    cursor: pointer;
+
+    &--grey {
+        opacity: 0.8;
+        background-image: linear-gradient(to right, rgb(107, 107, 107), rgb(49, 49, 49));
+        cursor: auto;
+    }
+
+    &--off {
+        display: none;
+    }
+
+    &--small {
+        margin: 0;
+        width: 15rem;
+        font-size: 1.8rem;
+        box-shadow: 0 0.5rem 1rem rgba($color-black, 0.1);
+    }
+}

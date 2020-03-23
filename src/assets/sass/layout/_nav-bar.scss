@@ -1,0 +1,30 @@
+.nav-bar {
+    width: 100%;
+    background-color: $color-grey-light;
+    margin-bottom: 2rem;
+    padding: 1.8rem 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &__login-btn {
+        outline: none;
+        text-decoration: none;
+        border: none;
+        width: 5rem;
+        height: 5rem;
+        position: relative;
+        background-image: $gradient-main;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    &__login-icon {
+        color: $color-white;
+        font-size: 2.6rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}

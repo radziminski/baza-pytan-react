@@ -1,0 +1,49 @@
+.filter {
+    width: 90%;
+    max-width: 70rem;
+    margin: 4rem auto;
+    text-align: center;
+    margin-bottom: 5rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: row-reverse;
+
+    &__text {
+        display: block;
+        width: 30%;
+        font-size: 1.8rem;
+        border: none;
+        padding: 1.2rem 2rem;
+        background-image: $gradient-main;
+        font-weight: 500;
+        color: $color-white;
+        transform: translateX(-5.5rem);
+        border-radius: 3rem;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    &__input {
+        outline: none;
+        cursor: text;
+        &::placeholder {
+            color: $color-black;
+            opacity: 0.4;
+            font-size: 1.6rem;
+        }
+        font-size: 1.8rem;
+        border: none;
+        padding: 1.5rem 6rem 1.5rem 2rem;
+        width: calc(70% + 5.5rem);
+        border-radius: 3rem;
+        background-color: $color-grey-light;
+        border: 1px solid rgba($color-secondary, 0.4);
+        box-shadow: 0 0.5rem 0.8rem rgba($color-black, 0.06);
+        margin-left: 5.5rem;
+    }
+
+    &__icon {
+        transform: translateY(0.3rem);
+        margin-right: 0.5rem;
+    }
+}

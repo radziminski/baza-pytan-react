@@ -1,0 +1,183 @@
+.question-card {
+    width: 90%;
+    max-width: 100rem;
+    border-radius: 8px;
+    box-shadow: 0 1rem 2rem rgba($color-black, 0.1);
+    margin: 1rem auto;
+    overflow: hidden;
+    margin-bottom: 4rem;
+    position: relative;
+    transition: box-shadow 0.2s;
+
+    // &--input {
+    // }
+
+    &:hover {
+        box-shadow: 0 1rem 2.2rem rgba($color-black, 0.18);
+    }
+
+    &__title {
+        font-size: 2.1rem;
+        font-weight: 400;
+        width: 100%;
+        padding: 1rem 2rem;
+        text-align: left;
+        background-image: linear-gradient(to right, $color-primary-dark, $color-secondary);
+        color: $color-white;
+        word-wrap: break-word;
+
+        @include respond(phone) {
+            font-size: 1.9rem;
+        }
+
+        @include respond(small-phone) {
+            font-size: 1.8rem;
+        }
+
+        &--input {
+            cursor: text;
+            &::placeholder {
+                color: $color-white;
+                opacity: 0.75;
+            }
+            border: none;
+            padding: 1.8rem 2rem;
+        }
+    }
+
+    &__answer {
+        font-size: 1.8rem;
+        padding: 1.2rem 2rem 1.2rem 2rem;
+        width: 100%;
+        word-wrap: break-word;
+
+        @include respond(phone) {
+            font-size: 1.7rem;
+        }
+
+        @include respond(small-phone) {
+            font-size: 1.6rem;
+        }
+
+        &--input {
+            cursor: text;
+            &::placeholder {
+                color: $color-grey;
+                opacity: 0.75;
+            }
+            border: none;
+            resize: none;
+            font: inherit;
+            height: 15rem;
+            padding: 1rem 2rem;
+        }
+    }
+
+    &__btn {
+        display: block;
+        width: 100%;
+        outline: none;
+        text-decoration: none;
+        border: none;
+        background-image: linear-gradient(to right, #00b09b, #96c93d);
+        font-size: 2rem;
+        color: $color-white;
+        padding: 1rem 1rem;
+        cursor: pointer;
+    }
+
+    &__delete-btn {
+        opacity: 0.9;
+        width: 100%;
+        outline: none;
+        text-decoration: none;
+        border: none;
+        position: absolute;
+        display: block;
+        background-image: linear-gradient(to bottom right, #ff1419 60%, #ff1419);
+        width: 3rem;
+        height: 3rem;
+        top: 1rem;
+        right: 1rem;
+        font-size: 2.3rem;
+        font-weight: 500;
+        border-radius: 5px;
+        cursor: pointer;
+        color: $color-white;
+
+        div {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform: translate(-0.1rem, -1rem);
+            &:after {
+                content: '';
+                display: block;
+                height: 70%;
+                width: 2px;
+                background-color: $color-white;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: rotate(45deg);
+            }
+            &:before {
+                content: '';
+                display: block;
+                height: 70%;
+                width: 2px;
+                background-color: $color-white;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: rotate(-45deg);
+            }
+        }
+
+        box-shadow: 0 1rem 1rem rgba($color-black, 0.1);
+    }
+
+    &__key-words {
+        display: block;
+        width: 100%;
+        font-size: 1.5rem;
+        font-weight: 500;
+        padding: 1rem 2rem 2rem 2rem;
+
+        &--input {
+            cursor: text;
+            &::placeholder {
+                color: $color-grey;
+                opacity: 0.75;
+            }
+            border: none;
+            resize: none;
+            font: inherit;
+            height: 6rem;
+            padding: 1rem 2rem;
+            font-size: 1.7rem;
+        }
+    }
+
+    &__key-words-title {
+        display: block;
+        width: 100%;
+        font-size: 1.6rem;
+        font-weight: 500;
+        padding: 1rem 2rem 0 2rem;
+    }
+
+    &__key-word {
+        display: inline-block;
+        padding: 0.2rem 1rem;
+        border-radius: 7px;
+        color: rgba($color-secondary, 0.7);
+        border: 1px solid rgba($color-secondary, 0.55);
+        margin-right: 1rem;
+
+        &--default {
+            display: block;
+            color: rgba($color-black, 0.6);
+        }
+    }
+}

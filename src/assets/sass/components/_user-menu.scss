@@ -1,0 +1,43 @@
+.user-menu {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 105%);
+
+    width: 22rem;
+    background-color: white;
+    border-radius: 5px;
+    z-index: 600;
+    box-shadow: 0 0.2rem 1rem rgba($color-black, 0.2);
+    border: 1px solid rgba($color-grey, 0.2);
+
+    &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: -5px;
+        left: 50%;
+        transform: translate(-50%, 0);
+        background-color: rgb(209, 209, 209);
+        width: 12px;
+        height: 6px;
+        z-index: 601;
+        clip-path: polygon(0% 100%, 50% 0%, 100% 100%);
+    }
+
+    &__list {
+        list-style: none;
+    }
+
+    &__link {
+        display: block;
+        padding: 1.5rem 1rem;
+        text-align: center;
+        background-color: rgba($color-black, 0.02);
+        font-size: 1.6rem;
+
+        &:hover {
+            background-color: rgba($color-primary, 0.3);
+        }
+    }
+}
