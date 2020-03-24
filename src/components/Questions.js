@@ -18,6 +18,7 @@ const Questions = props => {
             {props.questions.map(el => (
                 <QuestionCard
                     key={el.id}
+                    id={el.id}
                     question={el.question}
                     answer={el.answer}
                     keyWords={el.keyWords}

@@ -88,7 +88,6 @@
 
     &__delete-btn {
         opacity: 0.9;
-        width: 100%;
         outline: none;
         text-decoration: none;
         border: none;
@@ -135,6 +134,29 @@
         }
 
         box-shadow: 0 1rem 1rem rgba($color-black, 0.1);
+    }
+
+    &__edit-btn {
+        opacity: 0.9;
+        width: 100%;
+        outline: none;
+        text-decoration: none;
+        border: none;
+        position: absolute;
+        display: block;
+        background-image: $gradient-premium;
+        width: 3rem;
+        height: 3rem;
+        top: 1rem;
+        right: 5rem;
+        font-size: 2.3rem;
+        font-weight: 500;
+        border-radius: 5px;
+        cursor: pointer;
+        color: $color-white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     &__key-words {

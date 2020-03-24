@@ -5,7 +5,14 @@ import Questions from './Questions';
 import { database, backendFunctions } from '../firebase';
 import AddQestionCard from './AddQestionCard';
 import { connect } from 'react-redux';
-import { fetchQuestions, deleteQuestion } from '../actions/questionActions';
+import {
+    fetchPublicQuestions,
+    fetchMyReviewQuestions,
+    deleteQuestion,
+    fetchAllReviewQuestions,
+    createPublicQuestion,
+    createReviewQuestion
+} from '../actions/questionActions';
 
 export class QuestionsBox extends Component {
     defaultQuestionsPerPage = 4;
@@ -14,14 +21,44 @@ export class QuestionsBox extends Component {
         filterInput: [],
         addingQuestion: false,
         isFiltering: false,
-        numOfQuestions: this.defaultQuestionsPerPage
+        numOfQuestions: this.defaultQuestionsPerPage,
+        type: 'public'
     };
 
     componentDidMount() {
-        this.props.fetchQuestions();
-
+        this.loadQuestions(this.props.type);
+        if (this.props.type) this.setState({ type: this.props.type });
         // DELETE THIS
     }
+
+    componentDidUpdate() {
+        console.log(this.props.questions);
+        if (this.props.type !== this.state.type) {
+            this.setState({ type: this.props.type });
+            this.loadQuestions(this.props.type);
+        }
+    }
+
+    loadQuestions = type => {
+        switch (type) {
+            case 'private':
+                if (!this.props.user) {
+                    this.props.history.push('/');
+                    return;
+                }
+                if (this.props.user.uid) this.props.fetchMyReviewQuestions(this.props.user.uid);
+                break;
+            case 'review':
+                if (!this.props.user || !this.props.isPublisher) {
+                    this.props.history.push('/');
+                    return;
+                }
+                this.props.fetchAllReviewQuestions();
+                break;
+            default:
+                this.props.fetchPublicQuestions();
+        }
+    };
 
     onAddingQuestion = () => {
         this.setState({ addingQuestion: true });
@@ -32,6 +69,12 @@ export class QuestionsBox extends Component {
     };
 
     onAddedQuestion = question => {
+        if (!this.props.user || !this.props.user.uid) return;
+        if (this.state.type === 'private') {
+            this.props.createReviewQuestion(question, this.props.user.uid);
+        } else {
+            this.props.createPublicQuestion(question, this.props.user.uid);
+        }
         this.onEndAddQuestion();
     };
 
@@ -54,7 +97,18 @@ export class QuestionsBox extends Component {
     };
 
     onDeleteQuestion = id => {
-        this.props.deleteQuestion(id);
+        switch (this.state.type) {
+            case 'private':
+                this.props.deleteQuestion(id, 'reviewQuestions');
+                break;
+            case 'review':
+                if (!this.props.isPublisher) return;
+                this.props.deleteQuestion(id, 'reviewQuestions');
+                break;
+            default:
+                if (!this.props.isPublisher) return;
+                this.props.deleteQuestion(id, 'publicQuestions');
+        }
     };
 
     render() {
@@ -68,7 +122,7 @@ export class QuestionsBox extends Component {
                 Załaduj więcej pytań
             </Button>
         );
-        if (this.props.isAuthenticated)
+        if ((this.props.isAdmin || this.state.type === 'private') && this.state.type !== 'review')
             btns = (
                 <div className="questions-box__btns">
                     <Button onClick={this.onAddingQuestion}>Dodaj pytanie</Button>
@@ -84,20 +138,12 @@ export class QuestionsBox extends Component {
                     </Button>
                 </div>
             );
-        // const btns = (
-        //     <div>
-        //         <Button>Dodaj pytanie</Button>
-        //         <Button>Załaduj wszystkie pytania</Button>
-        //         <Button>Załaduj przykładowe pytania</Button>
-        //         <Button>Pobierz wszystkie pytania</Button>
-        //     </div>
-        // );
         let questionsToRender = this.props.questions.filter(el => {
             if (this.state.filterInput.length === 0) return true;
             if (this.state.filterInput[0].length < 2) return true;
             this.resetQuestionsNum();
             let flag = false;
-            if (el.keyWords)
+            if (el.keyWords && el.keyWords.forEach)
                 el.keyWords.forEach(keyWord => {
                     this.state.filterInput.forEach(key => {
                         if (keyWord.toLowerCase().includes(key.toLowerCase()) && key.length > 1)
@@ -105,7 +151,11 @@ export class QuestionsBox extends Component {
                     });
                 });
             this.state.filterInput.forEach(key => {
-                if (el.question.toLowerCase().includes(key.toLowerCase()) && key.length > 1)
+                if (
+                    el.question &&
+                    el.question.toLowerCase().includes(key.toLowerCase()) &&
+                    key.length > 1
+                )
                     flag = true;
             });
 
@@ -146,10 +196,17 @@ export class QuestionsBox extends Component {
 
 const mapStateToProps = state => ({
     questions: state.questions.items,
-    isAuthenticated: state.auth.isAuthenticated
+    isAuthenticated: state.auth.isAuthenticated,
+    user: state.auth.user,
+    isPublisher: state.auth.isPublisher,
+    isAdmin: state.auth.isAdmin
 });
 
 export default connect(mapStateToProps, {
-    fetchQuestions,
-    deleteQuestion
+    fetchPublicQuestions,
+    deleteQuestion,
+    fetchMyReviewQuestions,
+    fetchAllReviewQuestions,
+    createPublicQuestion,
+    createReviewQuestion
 })(QuestionsBox);

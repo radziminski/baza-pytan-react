@@ -9,20 +9,13 @@ export class AdminDashboard extends Component {
     };
 
     componentDidMount() {
-        //if (!this.props.isAdmin) this.props.history.push('/');
-        database
-            .ref('users')
-            .once('value')
-            .then(data => data.val())
-            .then(users => {
-                console.log(users);
-            });
+        if (!this.props.isAdmin) this.props.history.push('/');
     }
 
     render() {
         return (
             <div className="admin-dash">
-                <h1 className="heading-primary">Admin - Lista użytkowników</h1>
+                <h1 className="heading-primary">Zarządzaj użytkownikami</h1>
                 <UsersBox />
             </div>
         );

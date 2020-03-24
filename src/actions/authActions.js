@@ -44,9 +44,10 @@ export const loadUser = user => dispatch => {
             .then(data => data.val())
             .then(userData => {
                 console.log(userData);
-                user.firstName = userData.firstName;
-                user.lastName = userData.lastName;
-                user.city = userData.city;
+                if (!userData) throw new Error('User is not defined in database');
+                user.firstName = userData.firstName || 'brak informacji';
+                user.lastName = userData.lastName || 'brak informacji';
+                user.city = userData.city || 'brak informacji';
                 console.log(user);
                 dispatch({
                     type: USER_LOADED,
@@ -55,8 +56,12 @@ export const loadUser = user => dispatch => {
             })
             .catch(err => {
                 dispatch(returnErrors(err.message, err.code));
+                user.firstName = 'brak informacji';
+                user.lastName = 'brak informacji';
+                user.city = 'brak informacji';
                 dispatch({
-                    type: AUTH_ERROR
+                    type: USER_LOADED,
+                    payload: user
                 });
             });
     } else

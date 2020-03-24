@@ -14,6 +14,7 @@
     cursor: pointer;
     transition: transform 0.2s;
     position: relative;
+    backface-visibility: hidden;
 
     &:hover {
         transform: scale(1.03);

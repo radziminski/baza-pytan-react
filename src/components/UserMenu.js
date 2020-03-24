@@ -9,6 +9,9 @@ const UserMenu = props => {
     return (
         <div className="user-menu" onClick={props.onClick}>
             <ul className="user-menu__list">
+                <li className="user-menu__link">
+                    {props.firstName} {props.lastName}
+                </li>
                 <li
                     className="user-menu__link"
                     onClick={() => {
@@ -21,7 +24,7 @@ const UserMenu = props => {
                 </li>
                 <li className="user-menu__link">
                     <MdSettings className="user-menu__icon" />
-                    Zarządzaj kontem
+                    Zmień hasło
                 </li>
                 <li
                     className="user-menu__link"
@@ -38,4 +41,9 @@ const UserMenu = props => {
     );
 };
 
-export default withRouter(connect(null, { logOut })(UserMenu));
+const mapStateToProps = state => ({
+    firstName: state.auth.user.firstName,
+    lastName: state.auth.user.lastName
+});
+
+export default withRouter(connect(mapStateToProps, { logOut })(UserMenu));

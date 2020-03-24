@@ -53,6 +53,11 @@
         padding-left: 10rem;
         height: 14rem;
         box-shadow: 0 0.5rem 1.2rem rgba($color-black, 0.08);
+        transition: box-shadow 0.2s;
+
+        &:hover {
+            box-shadow: 0 0.5rem 1.2rem rgba($color-black, 0.13);
+        }
     }
 
     &__user-info {
@@ -85,6 +90,14 @@
         }
         &--confirm {
             background-image: $gradient-confirm;
+        }
+        &--premium {
+            background-image: $gradient-premium;
+        }
+        &--disabled {
+            background-image: $gradient-disabled;
+            cursor: auto;
+            opacity: 0.8;
         }
     }
 

@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { database } from '../firebase';
 import { IoMdPerson } from 'react-icons/io';
-import { FaBookReader } from 'react-icons/fa';
+import { FaBookReader, FaAngleDoubleDown } from 'react-icons/fa';
 import { addPublisher, removePublisher, addAdmin, removeAdmin } from '../actions/authActions';
 import { connect } from 'react-redux';
 import Button from './Button';
 import Filter from './Filter';
 import { Loader } from './Loader';
 import Modal from 'react-modal';
-import { MdDeleteForever, MdStar } from 'react-icons/md';
+import { MdDeleteForever, MdStar, MdSettings } from 'react-icons/md';
 
 const customStyles = {
     content: {
@@ -82,12 +82,15 @@ export class UsersBox extends Component {
 
     onDowngradeUser = user => {
         this.setState({ isLoading: true, showModal: false });
-        this.props.removePublisher(user.email, user.id);
+        if (user.isAdmin) this.props.removeAdmin(user.email, user.id);
+        else if (user.isPublisher) this.props.removePublisher(user.email, user.id);
     };
 
     onUpgradeUser = user => {
         this.setState({ isLoading: true, showModal: false });
-        this.props.addPublisher(user.email, user.id);
+        if (user.isAdmin) return;
+        if (user.isPublisher) this.props.addAdmin(user.email, user.id);
+        else this.props.addPublisher(user.email, user.id);
     };
 
     onConfirmUpgradeUser = id => {
@@ -106,8 +109,11 @@ export class UsersBox extends Component {
     onConfirmDowngradeUser = id => {
         const user = this.state.users.find(el => el.id === id);
         let msg = `Czy na pewno chcesz USUNĄĆ użytkownika ${user.firstName} ${user.lastName}?`;
-        if (user.isPublisher)
+        if (user.isAdmin)
+            msg = `Czy na pewno chcesz usunąć status ADMINISTRATORA użytkownikowi ${user.firstName} ${user.lastName}?`;
+        else if (user.isPublisher)
             msg = `Czy na pewno chcesz usunąć status recenzenta użytkownikowi ${user.firstName} ${user.lastName}?`;
+
         this.setState({
             showModal: true,
             currentUser: { ...user },
@@ -149,7 +155,9 @@ export class UsersBox extends Component {
                 <div key={el.id} id={el.id} className="users-box__user">
                     <div className="users-box__user-icon-box">
                         <div className="users-box__user-icon-container">
-                            {el.isPublisher ? (
+                            {el.isAdmin ? (
+                                <MdSettings className="users-box__user-icon" />
+                            ) : el.isPublisher ? (
                                 <FaBookReader className="users-box__user-icon" />
                             ) : (
                                 <IoMdPerson className="users-box__user-icon" />
@@ -170,23 +178,37 @@ export class UsersBox extends Component {
                                 {el.city}
                             </div>
                             <div className="users-box__user-info-field">
-                                Tel.:&emsp;
-                                {el.phone ? el.phone : 'Nie podano'}
+                                Status:&emsp;
+                                {el.isAdmin
+                                    ? 'Administrator'
+                                    : el.isPublisher
+                                    ? 'Recenzent'
+                                    : 'Użytkownik'}
                             </div>
                         </div>
                     </div>
                     <div className="users-box__btns">
                         <button
-                            className="users-box__btn users-box__btn--confirm"
+                            className={`users-box__btn ${
+                                el.isAdmin
+                                    ? 'users-box__btn--disabled'
+                                    : el.isPublisher
+                                    ? 'users-box__btn--premium'
+                                    : 'users-box__btn--confirm'
+                            }`}
                             onClick={() => this.onConfirmUpgradeUser(el.id)}
                         >
                             <MdStar className="users-box__btn-icon" />
                         </button>
                         <button
-                            className="users-box__btn users-box__btn--delete"
+                            className={'users-box__btn users-box__btn--delete'}
                             onClick={() => this.onConfirmDowngradeUser(el.id)}
                         >
-                            <MdDeleteForever className="users-box__btn-icon" />
+                            {el.isAdmin || el.isPublisher ? (
+                                <FaAngleDoubleDown className="users-box__btn-icon" />
+                            ) : (
+                                <MdDeleteForever className="users-box__btn-icon" />
+                            )}
                         </button>
                     </div>
                 </div>

@@ -17,6 +17,8 @@ $color-grey: #555;
 $gradient-main: linear-gradient(to bottom right, $color-primary, $color-secondary);
 $gradient-delete: linear-gradient(to bottom right, #ff4457, #fc182f);
 $gradient-confirm: linear-gradient(to bottom right, #b5db6f, #85c83b);
+$gradient-premium: linear-gradient(to bottom right, #ebd558, #e0bb16);
+$gradient-disabled: linear-gradient(to bottom right, rgb(48, 48, 48), #161616);
 
 // GRID
 $grid-width: 114rem;

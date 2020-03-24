@@ -29,7 +29,16 @@ export class AllQuestionsView extends Component {
                                 <Route path="/login" component={Login} />
                                 <Route path="/account" component={AccountDashboard} />
                                 <Route path="/admin" component={AdminDashboard} />
+                                <Route
+                                    path="/prywatne"
+                                    render={props => <QuestionsBox {...props} type={'private'} />}
+                                />
+                                <Route
+                                    path="/recenzje"
+                                    render={props => <QuestionsBox {...props} type={'review'} />}
+                                />
                                 <Route exact path="/" component={QuestionsBox} />
+                                <Route path="/pytania" component={QuestionsBox} />
                             </Switch>
                         </div>
                     </section>

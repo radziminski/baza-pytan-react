@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { createQuestion } from '../actions/questionActions';
 
 export class AddQestionCard extends Component {
     state = {
@@ -24,15 +23,17 @@ export class AddQestionCard extends Component {
 
     onSubmit = e => {
         e.preventDefault();
+        if (!this.props.user) {
+            console.error('Cant send question if not logged in!');
+            return;
+        }
         const question = {
-            id: 1,
             question: this.state.question,
             answer: this.state.answer,
             keyWords: this.state.keyWords
         };
 
-        this.props.createQuestion(question);
-        this.props.onSubmit();
+        this.props.onSubmit(question);
         //const newQuestionRef = this.props.databaseRef.push();
         // newQuestionRef
         //     .set({
@@ -84,4 +85,8 @@ export class AddQestionCard extends Component {
     }
 }
 
-export default connect(null, { createQuestion })(AddQestionCard);
+const mapStateToProps = state => ({
+    user: state.auth.user
+});
+
+export default connect(mapStateToProps, {})(AddQestionCard);

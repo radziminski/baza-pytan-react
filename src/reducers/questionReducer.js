@@ -1,4 +1,9 @@
-import { FETCH_QUESTIONS, NEW_QUESTION, DELETE_QUESTION } from '../actions/types';
+import {
+    FETCH_QUESTIONS,
+    NEW_PRIVATE_QUESTION,
+    NEW_PUBLIC_QUESTION,
+    DELETE_QUESTION
+} from '../actions/types';
 
 const initialState = {
     items: [],
@@ -13,7 +18,14 @@ export default function(state = initialState, action) {
                 ...state,
                 items: action.payload
             };
-        case NEW_QUESTION:
+        case NEW_PRIVATE_QUESTION:
+            newItems.push(action.payload);
+            return {
+                ...state,
+                items: newItems,
+                item: action.payload
+            };
+        case NEW_PUBLIC_QUESTION:
             newItems.push(action.payload);
             return {
                 ...state,
