@@ -1,0 +1,38 @@
+.user-nav-bar {
+    &__list {
+        list-style: none;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin-right: 2rem;
+        padding-top: 0.5rem;
+    }
+    &__link {
+        padding: 0.5rem 0;
+        text-align: center;
+        color: rgba($color-grey, 0.9);
+        font-size: 1.8rem;
+        font-weight: 500;
+        margin-right: 4rem;
+        cursor: pointer;
+        transition: color 0.2s;
+
+        &:after {
+            content: '';
+            display: block;
+            width: 0%;
+            height: 2px;
+            background-image: $gradient-main;
+            transition: width 0.2s;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        &:hover {
+            color: rgba($color-grey, 1);
+            &:after {
+                width: 90%;
+            }
+        }
+    }
+}

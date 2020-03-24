@@ -12,15 +12,34 @@
     color: $color-white;
     border-radius: 4rem;
     cursor: pointer;
+    transition: transform 0.2s;
+    position: relative;
+
+    &:hover {
+        transform: scale(1.03);
+    }
 
     &--grey {
         opacity: 0.8;
         background-image: linear-gradient(to right, rgb(107, 107, 107), rgb(49, 49, 49));
         cursor: auto;
+        &:hover {
+            transform: none;
+        }
     }
 
     &--off {
         display: none;
+    }
+
+    &--delete {
+        background-image: $gradient-delete;
+    }
+
+    &--short {
+        width: 25rem;
+        margin-left: 2rem;
+        margin-right: 2rem;
     }
 
     &--small {

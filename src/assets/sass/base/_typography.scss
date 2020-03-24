@@ -23,14 +23,16 @@ body {
         top: 100%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 30rem;
         height: 2px;
-        background-image: linear-gradient(
-            to right,
-            transparent 0%,
-            $color-secondary 20%,
-            $color-primary 80%,
-            transparent 100%
-        );
+        // width: 30rem;
+        // background-image: linear-gradient(
+        //     to right,
+        //     transparent 0%,
+        //     $color-secondary 20%,
+        //     $color-primary 80%,
+        //     transparent 100%
+        // );
+        background-image: $gradient-main;
+        width: 10rem;
     }
 }

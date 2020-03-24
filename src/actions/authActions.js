@@ -6,20 +6,60 @@ import {
     LOGIN_FAIL,
     LOGOUT_SUCCESS,
     REGISTER_SUCCESS,
-    REGISTER_FAIL
+    REGISTER_FAIL,
+    PUBLISHER_FAIL,
+    ADMIN_LOADED,
+    PUBLISHER_LOADED
 } from './types';
-import { auth } from '../firebase';
+import { auth, database } from '../firebase';
 import { returnErrors } from './errorActions';
+import { backendFunctions } from '../firebase';
 
 // Load User
 export const loadUser = user => dispatch => {
     const user = auth.currentUser;
-    if (user)
-        dispatch({
-            type: USER_LOADED,
-            payload: user
-        });
-    else
+
+    if (user) {
+        user.getIdTokenResult()
+            .then(idTokenResult => {
+                console.log('CLAIMS: ', idTokenResult.claims);
+                if (idTokenResult.claims.admin)
+                    dispatch({
+                        type: ADMIN_LOADED
+                    });
+                else if (idTokenResult.claims.publisher) {
+                    dispatch({
+                        type: PUBLISHER_LOADED
+                    });
+                }
+            })
+            .catch(err => {
+                dispatch({
+                    type: PUBLISHER_FAIL
+                });
+            });
+        database
+            .ref(`users/${user.uid}`)
+            .once('value')
+            .then(data => data.val())
+            .then(userData => {
+                console.log(userData);
+                user.firstName = userData.firstName;
+                user.lastName = userData.lastName;
+                user.city = userData.city;
+                console.log(user);
+                dispatch({
+                    type: USER_LOADED,
+                    payload: user
+                });
+            })
+            .catch(err => {
+                dispatch(returnErrors(err.message, err.code));
+                dispatch({
+                    type: AUTH_ERROR
+                });
+            });
+    } else
         dispatch({
             type: AUTH_ERROR
         });
@@ -55,16 +95,90 @@ export const logOut = () => dispatch => {
         });
 };
 
-export const registerUser = user => dispatch => {
-    auth.createUserWithEmailAndPassword(user.email, user.password)
-        .then(cred => {
-            console.log(cred);
-            dispatch({
-                type: REGISTER_SUCCESS
+export const registerUser = userData => dispatch => {
+    auth.createUserWithEmailAndPassword(userData.email, userData.password)
+        .then(cred => cred.user)
+        .then(user => {
+            database.ref(`users/${user.uid}`).set({
+                firstName: userData.firstName,
+                lastName: userData.lastName,
+                email: user.email,
+                city: userData.city,
+                isPublisher: false,
+                isAdmin: false
             });
+            dispatch({ type: REGISTER_SUCCESS });
         })
         .catch(err => {
             dispatch(returnErrors(err.message, err.code));
             dispatch({ type: REGISTER_FAIL });
+        });
+};
+
+export const addPublisher = (email, uid) => dispatch => {
+    console.log('adding');
+    backendFunctions
+        .httpsCallable('addPublisherRole')({ email })
+        .then(() => {
+            database
+                .ref(`users/${uid}`)
+                .update({ isPublisher: true })
+                .catch(err => {
+                    dispatch(returnErrors(err.message, err.code));
+                });
+            console.log('added');
+        })
+        .catch(err => {
+            dispatch(returnErrors(err.message, err.code));
+        });
+};
+
+export const removePublisher = (email, uid) => dispatch => {
+    backendFunctions
+        .httpsCallable('removePublisherRole')({ email })
+        .then(() => {
+            database
+                .ref(`users/${uid}`)
+                .update({ isPublisher: false })
+                .catch(err => {
+                    dispatch(returnErrors(err.message, err.code));
+                });
+        })
+        .catch(err => {
+            dispatch(returnErrors(err.message, err.code));
+        });
+};
+
+export const addAdmin = (email, uid) => dispatch => {
+    console.log('adding admin');
+    backendFunctions
+        .httpsCallable('addAdminRole')({ email })
+        .then(() => {
+            database
+                .ref(`users/${uid}`)
+                .update({ isAdmin: true })
+                .catch(err => {
+                    dispatch(returnErrors(err.message, err.code));
+                });
+            console.log('added admin');
+        })
+        .catch(err => {
+            dispatch(returnErrors(err.message, err.code));
+        });
+};
+
+export const removeAdmin = (email, uid) => dispatch => {
+    backendFunctions
+        .httpsCallable('removeAdminRole')({ email })
+        .then(() => {
+            database
+                .ref(`users/${uid}`)
+                .update({ isAdmin: false })
+                .catch(err => {
+                    dispatch(returnErrors(err.message, err.code));
+                });
+        })
+        .catch(err => {
+            dispatch(returnErrors(err.message, err.code));
         });
 };

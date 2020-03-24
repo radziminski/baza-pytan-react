@@ -31,13 +31,24 @@
 
     &__link {
         display: block;
-        padding: 1.5rem 1rem;
-        text-align: center;
+        position: relative;
+        padding: 1.5rem 2.5rem 1.5rem 3rem;
+        text-align: right;
         background-color: rgba($color-black, 0.02);
         font-size: 1.6rem;
 
         &:hover {
             background-color: rgba($color-primary, 0.3);
         }
+    }
+
+    &__icon {
+        font-size: 2rem;
+        transform: translateY(-50%);
+        color: $color-grey;
+        opacity: 0.8;
+        position: absolute;
+        top: 50%;
+        left: 2rem;
     }
 }

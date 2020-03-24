@@ -1,21 +1,26 @@
 import React, { Component, Fragment } from 'react';
-import QuestionsFilter from './QuestionsFilter';
+import Filrer from './Filter';
 import Button from './Button';
 import Questions from './Questions';
-import { database } from '../firebase';
+import { database, backendFunctions } from '../firebase';
 import AddQestionCard from './AddQestionCard';
 import { connect } from 'react-redux';
 import { fetchQuestions, deleteQuestion } from '../actions/questionActions';
 
 export class QuestionsBox extends Component {
+    defaultQuestionsPerPage = 4;
+
     state = {
-        questions: [],
         filterInput: [],
-        addingQuestion: false
+        addingQuestion: false,
+        isFiltering: false,
+        numOfQuestions: this.defaultQuestionsPerPage
     };
 
     componentDidMount() {
         this.props.fetchQuestions();
+
+        // DELETE THIS
     }
 
     onAddingQuestion = () => {
@@ -30,8 +35,22 @@ export class QuestionsBox extends Component {
         this.onEndAddQuestion();
     };
 
+    loadMoreQuestions = () => {
+        const oldQuestionsNum = this.state.numOfQuestions;
+        this.setState({ numOfQuestions: oldQuestionsNum + 3 });
+    };
+
+    resetQuestionsNum = () => {
+        if (this.state.numOfQuestions !== this.defaultQuestionsPerPage)
+            this.setState({ numOfQuestions: this.defaultQuestionsPerPage });
+    };
+
     onFilterChange = input => {
-        this.setState({ filterInput: input });
+        if (input.length && input[0].length > 1) {
+            this.setState({ filterInput: input, isFiltering: true });
+            return;
+        }
+        this.setState({ filterInput: input, isFiltering: false });
     };
 
     onDeleteQuestion = id => {
@@ -39,7 +58,32 @@ export class QuestionsBox extends Component {
     };
 
     render() {
-        const btns = <Button onClick={this.onAddingQuestion}>Dodaj pytanie</Button>;
+        let btns = (
+            <Button
+                onClick={this.loadMoreQuestions}
+                className={
+                    this.state.numOfQuestions >= this.props.questions.length ? 'btn--grey' : ''
+                }
+            >
+                Załaduj więcej pytań
+            </Button>
+        );
+        if (this.props.isAuthenticated)
+            btns = (
+                <div className="questions-box__btns">
+                    <Button onClick={this.onAddingQuestion}>Dodaj pytanie</Button>
+                    <Button
+                        onClick={this.loadMoreQuestions}
+                        className={
+                            this.state.numOfQuestions >= this.props.questions.length
+                                ? 'btn--grey'
+                                : ''
+                        }
+                    >
+                        Załaduj więcej pytań
+                    </Button>
+                </div>
+            );
         // const btns = (
         //     <div>
         //         <Button>Dodaj pytanie</Button>
@@ -51,15 +95,25 @@ export class QuestionsBox extends Component {
         let questionsToRender = this.props.questions.filter(el => {
             if (this.state.filterInput.length === 0) return true;
             if (this.state.filterInput[0].length < 2) return true;
-            if (!el.keyWords) return false;
+            this.resetQuestionsNum();
             let flag = false;
-            el.keyWords.forEach(keyWord => {
-                this.state.filterInput.forEach(key => {
-                    if (keyWord.includes(key) && key.length > 1) flag = true;
+            if (el.keyWords)
+                el.keyWords.forEach(keyWord => {
+                    this.state.filterInput.forEach(key => {
+                        if (keyWord.toLowerCase().includes(key.toLowerCase()) && key.length > 1)
+                            flag = true;
+                    });
                 });
+            this.state.filterInput.forEach(key => {
+                if (el.question.toLowerCase().includes(key.toLowerCase()) && key.length > 1)
+                    flag = true;
             });
+
             return flag;
         });
+        if (questionsToRender && questionsToRender.length > this.state.numOfQuestions) {
+            questionsToRender.splice(this.state.numOfQuestions);
+        }
         let addQuestionCard = null;
         if (this.state.addingQuestion) {
             addQuestionCard = (
@@ -74,8 +128,15 @@ export class QuestionsBox extends Component {
         return (
             <Fragment>
                 {/* <h1 className="heading-primary js--heading">Baza pytań</h1> */}
-                <QuestionsFilter onChange={this.onFilterChange} />
-                <Questions questions={questionsToRender} onDeleteQuestion={this.onDeleteQuestion} />
+                <Filrer
+                    placeholder="Szukaj pytań po słowach kluczowych..."
+                    onChange={this.onFilterChange}
+                />
+                <Questions
+                    questions={questionsToRender}
+                    onDeleteQuestion={this.onDeleteQuestion}
+                    showLoader={!this.state.isFiltering}
+                />
                 {addQuestionCard}
                 {btns}
             </Fragment>
@@ -84,7 +145,11 @@ export class QuestionsBox extends Component {
 }
 
 const mapStateToProps = state => ({
-    questions: state.questions.items
+    questions: state.questions.items,
+    isAuthenticated: state.auth.isAuthenticated
 });
 
-export default connect(mapStateToProps, { fetchQuestions, deleteQuestion })(QuestionsBox);
+export default connect(mapStateToProps, {
+    fetchQuestions,
+    deleteQuestion
+})(QuestionsBox);

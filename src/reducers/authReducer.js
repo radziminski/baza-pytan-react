@@ -6,13 +6,19 @@ import {
     LOGIN_FAIL,
     LOGOUT_SUCCESS,
     REGISTER_SUCCESS,
-    REGISTER_FAIL
+    REGISTER_FAIL,
+    ADMIN_FAIL,
+    ADMIN_LOADED,
+    PUBLISHER_FAIL,
+    PUBLISHER_LOADED
 } from '../actions/types';
 
 const initialState = {
     isAuthenticated: null,
     isLoading: false,
-    user: null
+    user: null,
+    isAdmin: false,
+    isPublisher: false
 };
 
 export default function(state = initialState, action) {
@@ -45,7 +51,32 @@ export default function(state = initialState, action) {
                 ...state,
                 user: null,
                 isLoading: false,
-                isAuthenticated: false
+                isAuthenticated: false,
+                isAdmin: false,
+                isPublisher: false
+            };
+        case ADMIN_LOADED:
+            return {
+                ...state,
+                isAdmin: true,
+                isPublisher: true
+            };
+        case PUBLISHER_LOADED:
+            return {
+                ...state,
+                isAdmin: false,
+                isPublisher: true
+            };
+        case ADMIN_FAIL:
+            return {
+                ...state,
+                isAdmin: false
+            };
+        case PUBLISHER_FAIL:
+            return {
+                ...state,
+                isPublisher: false,
+                isAdmin: false
             };
         default:
             return state;

@@ -1,0 +1,100 @@
+.users-box {
+    width: 90%;
+    max-width: 70rem;
+    margin: 4rem auto;
+
+    &__user-icon-box {
+        height: 100%;
+        width: 20%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-image: $gradient-main;
+        color: $color-white;
+        padding: 1rem;
+    }
+
+    &__user-icon-container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+
+    &__user-icon {
+        font-size: 4.5rem;
+        color: $color-white;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    &__user-info-box {
+        height: 100%;
+        width: 80%;
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 0.5rem 3rem;
+    }
+
+    &__user-name {
+        display: block;
+        font-size: 2rem;
+        font-weight: 400;
+        margin-bottom: 0.3rem;
+    }
+
+    &__user {
+        padding: 0.6rem 1rem;
+        border: 1px solid rgba($color-grey, 0.28);
+        margin-bottom: 3rem;
+        position: relative;
+        padding-left: 10rem;
+        height: 14rem;
+        box-shadow: 0 0.5rem 1.2rem rgba($color-black, 0.08);
+    }
+
+    &__user-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 80%;
+        font-size: 1.8rem;
+    }
+
+    &__btns {
+        position: absolute;
+        height: 100%;
+        width: 10rem;
+        top: 0;
+        right: 0;
+    }
+
+    &__btn {
+        display: block;
+        height: 50%;
+        width: 100%;
+        outline: none;
+        border: none;
+        cursor: pointer;
+        background-color: $gradient-main;
+
+        &--delete {
+            background-image: $gradient-delete;
+        }
+        &--confirm {
+            background-image: $gradient-confirm;
+        }
+    }
+
+    &__btn:hover &__btn-icon {
+        transform: scale(1.35);
+    }
+
+    &__btn-icon {
+        color: $color-white;
+        font-size: 3rem;
+        transition: transform 0.2s;
+    }
+}

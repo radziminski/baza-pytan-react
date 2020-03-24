@@ -9,9 +9,11 @@ const Questions = props => {
         </span>
     );
 
+    const msg = <h3 className="u-centered">Nie znaleziono żadnych pytań.</h3>;
+
     return (
         <div className="questions-container">
-            {props.questions.length === 0 ? loader : null}
+            {props.questions.length === 0 ? (props.showLoader ? loader : msg) : null}
 
             {props.questions.map(el => (
                 <QuestionCard

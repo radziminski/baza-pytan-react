@@ -1,0 +1,9 @@
+.questions-box {
+    &__btns {
+        display: flex;
+        width: 90%;
+        max-width: 80rem;
+        justify-content: space-around;
+        margin: 0 auto;
+    }
+}

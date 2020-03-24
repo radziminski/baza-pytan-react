@@ -11,5 +11,10 @@ export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 export const REGISTER_FAIL = 'REGISTER_FAIL';
+export const ADMIN_LOADED = 'ADMIN_LOADED';
+export const ADMIN_FAIL = 'ADMIN_FAIL';
+export const PUBLISHER_LOADED = 'PUBLISHER_LOADED';
+export const PUBLISHER_FAIL = 'PUBLISHER_FAIL';
+
 export const GET_ERRORS = 'GET_ERRORS';
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';

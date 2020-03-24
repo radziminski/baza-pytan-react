@@ -14,9 +14,15 @@
 @import './components/login';
 @import './components/loader';
 @import './components/user-menu';
+@import './components/modal';
+@import './components/questions-box';
+@import './components/account-info';
+@import './components/users-box';
 
 @import './layout/header';
 @import './layout/grid';
 @import './layout/nav-bar';
+@import './layout/user-nav-bar';
+@import './layout/modal';
 
 @import './pages/home';

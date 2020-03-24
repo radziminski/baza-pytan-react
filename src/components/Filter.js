@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { GoSearch } from 'react-icons/go';
 
-export class QuestionsFilter extends Component {
+export class Filter extends Component {
     state = {
         value: ''
     };
@@ -20,7 +20,7 @@ export class QuestionsFilter extends Component {
                 <input
                     className="filter__input js--filter-input"
                     type="text"
-                    placeholder="Wyszukaj po słowach kluczowych oddzielonych przecinkami..."
+                    placeholder={this.props.placeholder}
                     onChange={this.onChange}
                     value={this.state.value}
                 />
@@ -29,4 +29,4 @@ export class QuestionsFilter extends Component {
     }
 }
 
-export default QuestionsFilter;
+export default Filter;

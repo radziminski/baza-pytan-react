@@ -2,6 +2,7 @@ import firebase from 'firebase/app';
 import * as firebaseui from 'firebaseui/';
 import 'firebase/database';
 import 'firebase/auth';
+import 'firebase/functions';
 
 // FIREBASE config
 var firebaseConfig = {
@@ -36,3 +37,4 @@ var ui = new firebaseui.auth.AuthUI(firebase.auth());
 
 export const database = firebase.database();
 export const auth = firebase.auth();
+export const backendFunctions = firebase.functions();

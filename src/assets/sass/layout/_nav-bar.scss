@@ -1,11 +1,21 @@
 .nav-bar {
     width: 100%;
     background-color: $color-grey-light;
-    margin-bottom: 2rem;
     padding: 1.8rem 5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+
+    &--sticked {
+        position: fixed;
+        width: 100vw;
+        top: 0;
+        left: 0;
+        z-index: 400;
+        padding: 1.8rem 10%;
+    }
 
     &__login-btn {
         outline: none;
@@ -17,6 +27,7 @@
         background-image: $gradient-main;
         border-radius: 50%;
         cursor: pointer;
+        z-index: 550;
     }
 
     &__login-icon {
@@ -26,5 +37,11 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+    }
+
+    &__user {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
     }
 }

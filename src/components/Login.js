@@ -17,6 +17,10 @@ export class Login extends Component {
         city: ''
     };
 
+    componentDidUpdate() {
+        if (this.props.isAuthenticated) this.props.history.push('/');
+    }
+
     onChangeFormType = type => {
         this.setState({ register: type === true });
     };
@@ -24,7 +28,14 @@ export class Login extends Component {
     onSubmit = e => {
         e.preventDefault();
         if (!this.state.register) this.props.loginUser(this.state.email, this.state.password);
-        else this.props.registerUser({ email: this.state.email, password: this.state.password });
+        else
+            this.props.registerUser({
+                email: this.state.email,
+                password: this.state.password,
+                firstName: this.state.firstName,
+                lastName: this.state.lastName,
+                city: this.state.city
+            });
         if (!this.props.isLoading) this.props.history.push('/');
     };
 
@@ -137,6 +148,14 @@ export class Login extends Component {
                         icon={<IoMdLock className="login__icon" />}
                         required
                     />
+                    <LoginTextInput
+                        type="text"
+                        id="city"
+                        placeholder="Miejscowość"
+                        onChange={this.onInputChange}
+                        label="Miejscowość zamieszkania:"
+                        icon={<MdEmail className="login__icon" />}
+                    />
                 </Fragment>
             );
         }
@@ -157,7 +176,8 @@ export class Login extends Component {
 }
 
 const mapStateToProps = state => ({
-    loading: state.auth.isLoading
+    loading: state.auth.isLoading,
+    isAuthenticated: state.auth.isAuthenticated
 });
 
 export default connect(mapStateToProps, { loginUser, registerUser })(Login);
