@@ -2,7 +2,8 @@ import {
     FETCH_QUESTIONS,
     NEW_PRIVATE_QUESTION,
     NEW_PUBLIC_QUESTION,
-    DELETE_QUESTION
+    DELETE_QUESTION,
+    UPDATE_QUESTION
 } from '../actions/types';
 
 const initialState = {
@@ -37,6 +38,17 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 items: newItems
+            };
+        case UPDATE_QUESTION:
+            let newItemIndex = newItems.findIndex(el => el.id === action.payload.id);
+            newItems[newItemIndex] = {
+                ...newItems[newItemIndex],
+                ...action.payload.question
+            };
+            return {
+                ...state,
+                items: newItems,
+                item: newItems[newItemIndex]
             };
         default:
             return state;

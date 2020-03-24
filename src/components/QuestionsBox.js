@@ -11,7 +11,8 @@ import {
     deleteQuestion,
     fetchAllReviewQuestions,
     createPublicQuestion,
-    createReviewQuestion
+    createReviewQuestion,
+    updateQuestion
 } from '../actions/questionActions';
 
 export class QuestionsBox extends Component {
@@ -22,7 +23,8 @@ export class QuestionsBox extends Component {
         addingQuestion: false,
         isFiltering: false,
         numOfQuestions: this.defaultQuestionsPerPage,
-        type: 'public'
+        type: 'public',
+        editedPosition: null
     };
 
     componentDidMount() {
@@ -58,6 +60,8 @@ export class QuestionsBox extends Component {
             default:
                 this.props.fetchPublicQuestions();
         }
+        this.resetEditingQuestion();
+        this.resetQuestionsNum();
     };
 
     onAddingQuestion = () => {
@@ -68,14 +72,19 @@ export class QuestionsBox extends Component {
         this.setState({ addingQuestion: false });
     };
 
-    onAddedQuestion = question => {
+    onAddedQuestion = (question, id = null) => {
         if (!this.props.user || !this.props.user.uid) return;
         if (this.state.type === 'private') {
-            this.props.createReviewQuestion(question, this.props.user.uid);
+            !id
+                ? this.props.createReviewQuestion(question, this.props.user.uid)
+                : this.props.updateQuestion(id, 'reviewQuestions', question);
         } else {
-            this.props.createPublicQuestion(question, this.props.user.uid);
+            !id
+                ? this.props.createPublicQuestion(question, this.props.user.uid)
+                : this.props.updateQuestion(id, 'publicQuestions', question);
         }
         this.onEndAddQuestion();
+        this.resetEditingQuestion();
     };
 
     loadMoreQuestions = () => {
@@ -109,6 +118,15 @@ export class QuestionsBox extends Component {
                 if (!this.props.isPublisher) return;
                 this.props.deleteQuestion(id, 'publicQuestions');
         }
+    };
+
+    onEditedQuestion = id => {
+        const position = this.props.questions.findIndex(el => el.id === id);
+        this.setState({ editedPosition: position });
+    };
+
+    resetEditingQuestion = () => {
+        this.setState({ editedPosition: null });
     };
 
     render() {
@@ -167,14 +185,34 @@ export class QuestionsBox extends Component {
         let addQuestionCard = null;
         if (this.state.addingQuestion) {
             addQuestionCard = (
-                <AddQestionCard
-                    onClose={this.onEndAddQuestion}
-                    onSubmit={this.onAddedQuestion}
-                    databaseRef={database.ref('questions')}
+                <AddQestionCard onClose={this.onEndAddQuestion} onSubmit={this.onAddedQuestion} />
+            );
+        }
+        let questionsRender = (
+            <Questions
+                questions={questionsToRender}
+                onDeleteQuestion={this.onDeleteQuestion}
+                onEditQuestion={this.onEditedQuestion}
+                showLoader={!this.state.isFiltering}
+            />
+        );
+        if (this.state.editedPosition || this.state.editedPosition === 0) {
+            questionsRender = (
+                <Questions
+                    questions={questionsToRender}
+                    onDeleteQuestion={this.onDeleteQuestion}
+                    onEditQuestion={this.onEditedQuestion}
+                    showLoader={!this.state.isFiltering}
+                    editedPosition={this.state.editedPosition}
+                    methods={{
+                        onClose: this.resetEditingQuestion,
+                        onSubmit: this.onAddedQuestion
+                    }}
                 />
             );
         }
-
+        console.log(this.props.questions);
+        console.log(questionsToRender);
         return (
             <Fragment>
                 {/* <h1 className="heading-primary js--heading">Baza pytań</h1> */}
@@ -182,11 +220,7 @@ export class QuestionsBox extends Component {
                     placeholder="Szukaj pytań po słowach kluczowych..."
                     onChange={this.onFilterChange}
                 />
-                <Questions
-                    questions={questionsToRender}
-                    onDeleteQuestion={this.onDeleteQuestion}
-                    showLoader={!this.state.isFiltering}
-                />
+                {questionsRender}
                 {addQuestionCard}
                 {btns}
             </Fragment>
@@ -208,5 +242,6 @@ export default connect(mapStateToProps, {
     fetchMyReviewQuestions,
     fetchAllReviewQuestions,
     createPublicQuestion,
-    createReviewQuestion
+    createReviewQuestion,
+    updateQuestion
 })(QuestionsBox);

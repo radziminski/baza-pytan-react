@@ -9,6 +9,33 @@ export class AddQestionCard extends Component {
         keyWords: []
     };
 
+    setInputsFromProps = () => {
+        this.setState({
+            question: this.props.question || '',
+            answer: this.props.answer || '',
+            keyWordsString: this.props.keyWords
+                ? this.props.keyWords.join
+                    ? this.props.keyWords.join(',')
+                    : ''
+                : '',
+            keyWords: this.props.keyWords || []
+        });
+    };
+
+    componentDidMount() {
+        this.setInputsFromProps();
+    }
+
+    componentDidUpdate() {
+        if (
+            !this.state.question &&
+            !this.state.answer &&
+            !this.state.keyWordsString &&
+            (this.props.question || this.props.answer || this.props.keyWords)
+        )
+            this.setInputsFromProps();
+    }
+
     onInputChange = (e, inputType) => {
         this.setState({ [inputType]: e.target.value });
     };
@@ -34,20 +61,6 @@ export class AddQestionCard extends Component {
         };
 
         this.props.onSubmit(question);
-        //const newQuestionRef = this.props.databaseRef.push();
-        // newQuestionRef
-        //     .set({
-        //         question: question.question,
-        //         answer: question.answer,
-        //         keyWords: question.keyWords
-        //     })
-        //     .then(data => {
-        //         question.id = newQuestionRef.key;
-        //         this.props.onSubmit(question);
-        //     })
-        //     .catch(err => {
-        //         window.alert('Nie udało się wysłać pytania. Error: ' + err);
-        //     });
     };
 
     render() {

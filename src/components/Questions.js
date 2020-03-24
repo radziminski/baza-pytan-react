@@ -1,6 +1,7 @@
 import React from 'react';
 import QuestionCard from './QuestionCard';
 import { Loader } from './Loader';
+import AddQestionCard from './AddQestionCard';
 
 const Questions = props => {
     const loader = (
@@ -15,17 +16,32 @@ const Questions = props => {
         <div className="questions-container">
             {props.questions.length === 0 ? (props.showLoader ? loader : msg) : null}
 
-            {props.questions.map(el => (
-                <QuestionCard
-                    key={el.id}
-                    id={el.id}
-                    question={el.question}
-                    answer={el.answer}
-                    keyWords={el.keyWords}
-                    onDelete={() => props.onDeleteQuestion(el.id)}
-                    isDeletable={el.isDeletable !== false}
-                />
-            ))}
+            {props.questions.map((el, index) => {
+                if (props.editedPosition === index) {
+                    return (
+                        <AddQestionCard
+                            question={el.question}
+                            answer={el.answer}
+                            keyWords={el.keyWords}
+                            key={el.id}
+                            onClose={props.methods.onClose}
+                            onSubmit={question => props.methods.onSubmit(question, el.id)}
+                        />
+                    );
+                }
+                return (
+                    <QuestionCard
+                        key={el.id}
+                        id={el.id}
+                        question={el.question}
+                        answer={el.answer}
+                        keyWords={el.keyWords}
+                        onDelete={() => props.onDeleteQuestion(el.id)}
+                        onEdit={() => props.onEditQuestion(el.id)}
+                        isDeletable={el.isDeletable !== false}
+                    />
+                );
+            })}
         </div>
     );
 };

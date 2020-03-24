@@ -3,7 +3,8 @@ import {
     NEW_PRIVATE_QUESTION,
     DELETE_QUESTION,
     QUESTION_ERROR,
-    NEW_PUBLIC_QUESTION
+    NEW_PUBLIC_QUESTION,
+    UPDATE_QUESTION
 } from './types';
 import { database } from '../firebase';
 import { returnErrors } from '../actions/errorActions';
@@ -182,6 +183,15 @@ export const updateQuestion = (id, databaseName, dataToUpdate) => dispatch => {
         .ref(`${databaseName}/${id}`)
         .update({
             ...dataToUpdate
+        })
+        .then(() => {
+            dispatch({
+                type: UPDATE_QUESTION,
+                payload: {
+                    id,
+                    question: dataToUpdate
+                }
+            });
         })
         .catch(err => {
             dispatch(returnErrors(err.message, err.code));
