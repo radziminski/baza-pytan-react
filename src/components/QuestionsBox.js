@@ -21,7 +21,7 @@ export class QuestionsBox extends Component {
     state = {
         filterInput: [],
         addingQuestion: false,
-        isFiltering: false,
+        isFiltering: true,
         numOfQuestions: this.defaultQuestionsPerPage,
         type: 'public',
         editedPosition: null
@@ -36,9 +36,14 @@ export class QuestionsBox extends Component {
     componentDidUpdate() {
         console.log(this.props.questions);
         if (this.props.type !== this.state.type) {
-            this.setState({ type: this.props.type });
+            this.setState({ type: this.props.type, isFiltering: this.props.isFetching });
             this.loadQuestions(this.props.type);
+            this.resetEditingQuestion();
+        } else {
+            if (this.state.isFiltering !== this.props.isFetching)
+                this.setState({ isFiltering: this.props.isFetching });
         }
+        console.log('QUESTIONS', this.props.questions);
     }
 
     loadQuestions = type => {
@@ -73,14 +78,17 @@ export class QuestionsBox extends Component {
     };
 
     onAddedQuestion = (question, id = null) => {
+        console.log('ADDDING', question, id, this.props.user);
         if (!this.props.user || !this.props.user.uid) return;
         if (this.state.type === 'private') {
             !id
-                ? this.props.createReviewQuestion(question, this.props.user.uid)
+                ? this.props.createReviewQuestion(question, this.props.user)
                 : this.props.updateQuestion(id, 'reviewQuestions', question);
+        } else if (this.state.type === 'review') {
+            this.props.updateQuestion(id, 'reviewQuestions', question);
         } else {
             !id
-                ? this.props.createPublicQuestion(question, this.props.user.uid)
+                ? this.props.createPublicQuestion(question, this.props.user)
                 : this.props.updateQuestion(id, 'publicQuestions', question);
         }
         this.onEndAddQuestion();
@@ -193,7 +201,7 @@ export class QuestionsBox extends Component {
                 questions={questionsToRender}
                 onDeleteQuestion={this.onDeleteQuestion}
                 onEditQuestion={this.onEditedQuestion}
-                showLoader={!this.state.isFiltering}
+                showLoader={this.state.isFiltering}
             />
         );
         if (this.state.editedPosition || this.state.editedPosition === 0) {
@@ -202,7 +210,7 @@ export class QuestionsBox extends Component {
                     questions={questionsToRender}
                     onDeleteQuestion={this.onDeleteQuestion}
                     onEditQuestion={this.onEditedQuestion}
-                    showLoader={!this.state.isFiltering}
+                    showLoader={this.state.isFiltering}
                     editedPosition={this.state.editedPosition}
                     methods={{
                         onClose: this.resetEditingQuestion,
@@ -233,7 +241,8 @@ const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
     isPublisher: state.auth.isPublisher,
-    isAdmin: state.auth.isAdmin
+    isAdmin: state.auth.isAdmin,
+    isFetching: state.questions.isFetching
 });
 
 export default connect(mapStateToProps, {

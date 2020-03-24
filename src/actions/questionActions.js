@@ -4,12 +4,16 @@ import {
     DELETE_QUESTION,
     QUESTION_ERROR,
     NEW_PUBLIC_QUESTION,
-    UPDATE_QUESTION
+    UPDATE_QUESTION,
+    QUESTIONS_FETCHING
 } from './types';
 import { database } from '../firebase';
 import { returnErrors } from '../actions/errorActions';
 
 export const fetchPublicQuestions = () => dispatch => {
+    dispatch({
+        type: QUESTIONS_FETCHING
+    });
     database
         .ref('publicQuestions')
         .once('value')
@@ -39,6 +43,9 @@ export const fetchPublicQuestions = () => dispatch => {
 
 export const fetchMyReviewQuestions = uid => dispatch => {
     console.log('GETTING Q FROM: ', uid);
+    dispatch({
+        type: QUESTIONS_FETCHING
+    });
     if (!uid) {
         console.error('Getting questions without beeing authenticated!');
         return;
@@ -73,6 +80,10 @@ export const fetchMyReviewQuestions = uid => dispatch => {
 };
 
 export const fetchAllReviewQuestions = () => dispatch => {
+    dispatch({
+        type: QUESTIONS_FETCHING
+    });
+
     database
         .ref('reviewQuestions')
         .once('value')

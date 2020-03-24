@@ -3,21 +3,29 @@ import {
     NEW_PRIVATE_QUESTION,
     NEW_PUBLIC_QUESTION,
     DELETE_QUESTION,
-    UPDATE_QUESTION
+    UPDATE_QUESTION,
+    QUESTIONS_FETCHING
 } from '../actions/types';
 
 const initialState = {
     items: [],
-    item: {}
+    item: {},
+    isFetching: false
 };
 
 export default function(state = initialState, action) {
     let newItems = [...state.items];
     switch (action.type) {
+        case QUESTIONS_FETCHING:
+            return {
+                ...state,
+                isFetching: true
+            };
         case FETCH_QUESTIONS:
             return {
                 ...state,
-                items: action.payload
+                items: action.payload,
+                isFetching: false
             };
         case NEW_PRIVATE_QUESTION:
             newItems.push(action.payload);

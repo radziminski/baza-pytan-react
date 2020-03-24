@@ -11,6 +11,7 @@ const Questions = props => {
     );
 
     const msg = <h3 className="u-centered">Nie znaleziono żadnych pytań.</h3>;
+    const msg2 = <h3 className="u-centered">Nie ma żadnych pytań.</h3>;
 
     return (
         <div className="questions-container">
