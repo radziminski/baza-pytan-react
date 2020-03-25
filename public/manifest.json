@@ -18,7 +18,7 @@
             "sizes": "512x512"
         }
     ],
-    "start_url": "baza-pytan-test.netlify.com",
+    "start_url": "baza-pytan.netlify.com",
     "display": "standalone",
     "theme_color": "#a8c0ff",
     "background_color": "#ffffff"
