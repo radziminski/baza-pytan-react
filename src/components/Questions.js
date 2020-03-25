@@ -50,7 +50,7 @@ const Questions = props => {
                                   answer={el.answer}
                                   keyWords={el.keyWords}
                                   onDelete={() => props.onDeleteQuestion(el.id)}
-                                  onEdit={() => props.onEditQuestion(el.id)}
+                                  onEdit={() => props.onEditQuestion(index)}
                                   onConfirm={() => props.onConfirmQuestion(el.id)}
                                   isDeletable={el.isDeletable !== false}
                                   author={el.creator}
@@ -66,7 +66,7 @@ const Questions = props => {
                               answer={el.answer}
                               keyWords={el.keyWords}
                               onDelete={() => props.onDeleteQuestion(el.id)}
-                              onEdit={() => props.onEditQuestion(el.id)}
+                              onEdit={() => props.onEditQuestion(index)}
                               isDeletable={el.isDeletable !== false}
                               number={el.number}
                           />

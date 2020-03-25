@@ -20,7 +20,6 @@ export const fetchPublicQuestions = () => dispatch => {
         .once('value')
         .then(data => data.val())
         .then(questions => {
-            console.log('PUBLIC:', questions);
             const newQuestions = [];
             let counter = 0;
             for (let question in questions) {
@@ -45,7 +44,6 @@ export const fetchPublicQuestions = () => dispatch => {
 };
 
 export const fetchMyReviewQuestions = uid => dispatch => {
-    console.log('GETTING Q FROM: ', uid);
     dispatch({
         type: QUESTIONS_LOADING
     });
@@ -60,7 +58,6 @@ export const fetchMyReviewQuestions = uid => dispatch => {
         .once('value')
         .then(data => data.val())
         .then(questions => {
-            console.log(questions);
             const newQuestions = [];
             for (let question in questions) {
                 newQuestions.push({
@@ -92,7 +89,6 @@ export const fetchAllReviewQuestions = () => dispatch => {
         .once('value')
         .then(data => data.val())
         .then(questions => {
-            console.log(questions);
             const newQuestions = [];
             for (let question in questions) {
                 newQuestions.push({
@@ -115,10 +111,9 @@ export const fetchAllReviewQuestions = () => dispatch => {
 };
 
 export const createReviewQuestion = (question, user) => dispatch => {
-    console.log('SENDER', user);
-    // dispatch({
-    //     type: QUESTIONS_LOADING
-    // });
+    dispatch({
+        type: QUESTIONS_LOADING
+    });
     const newQuestionRef = database.ref('reviewQuestions').push();
     newQuestionRef
         .set({
@@ -150,7 +145,6 @@ export const createReviewQuestion = (question, user) => dispatch => {
 };
 
 export const createPublicQuestion = (question, user, addToCurrItems = true) => dispatch => {
-    console.log('SENDER', user);
     // dispatch({
     //     type: QUESTIONS_LOADING
     // });

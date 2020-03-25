@@ -14,7 +14,6 @@ import PasswordReset from '../components/PasswordReset';
 export class AllQuestionsView extends Component {
     componentDidMount() {
         auth.onAuthStateChanged(user => {
-            console.log(user);
             this.props.loadUser(user);
         });
     }

@@ -1,5 +1,4 @@
 import firebase from 'firebase/app';
-import * as firebaseui from 'firebaseui/';
 import 'firebase/database';
 import 'firebase/auth';
 import 'firebase/functions';
@@ -17,21 +16,6 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-var uiConfig = {
-    signInSuccessUrl: '<url-to-redirect-to-on-success>',
-    signInOptions: [
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        firebase.auth.FacebookAuthProvider.PROVIDER_ID
-    ],
-    tosUrl: '<your-tos-url>',
-    // Privacy policy url/callback.
-    privacyPolicyUrl: function() {
-        window.location.assign('<your-privacy-policy-url>');
-    }
-};
-
-// Initialize the FirebaseUI Widget using Firebase.
-var ui = new firebaseui.auth.AuthUI(firebase.auth());
 // The start method will wait until the DOM is loaded.
 // ui.start('#firebaseui-auth-container', uiConfig);
 

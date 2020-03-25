@@ -13,17 +13,6 @@ export class NavBar extends Component {
         sticked: false
     };
 
-    componentDidMount() {
-        // window.addEventListener('scroll', () => {
-        //     if (window.scrollY * 1 > 50) this.setState({ sticked: true });
-        //     else this.setState({ sticked: false });
-        //     console.log(window.innerWidth);
-        // });
-        // window.addEventListener('click', () => {
-        //     if (this.state.showUserMenu) this.hideUserMenu();
-        // });
-    }
-
     changeIcon = () => {
         this.setState({ icon: !this.state.icon });
     };

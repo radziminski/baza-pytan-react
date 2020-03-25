@@ -26,7 +26,6 @@ export const loadUser = user => dispatch => {
     if (user) {
         user.getIdTokenResult()
             .then(idTokenResult => {
-                console.log('CLAIMS: ', idTokenResult.claims);
                 if (idTokenResult.claims.admin)
                     dispatch({
                         type: ADMIN_LOADED
@@ -47,12 +46,10 @@ export const loadUser = user => dispatch => {
             .once('value')
             .then(data => data.val())
             .then(userData => {
-                console.log(userData);
                 if (!userData) throw new Error('User is not defined in database');
                 user.firstName = userData.firstName || 'brak informacji';
                 user.lastName = userData.lastName || 'brak informacji';
                 user.city = userData.city || 'brak informacji';
-                console.log(user);
                 dispatch({
                     type: USER_LOADED,
                     payload: user
@@ -80,7 +77,6 @@ export const loginUser = (email, password) => dispatch => {
     });
     auth.signInWithEmailAndPassword(email, password)
         .then(cred => {
-            console.log(cred);
             dispatch({
                 type: LOGIN_SUCCESS
             });
@@ -131,7 +127,6 @@ export const registerUser = userData => dispatch => {
 };
 
 export const addPublisher = (email, uid) => dispatch => {
-    console.log('adding');
     dispatch({
         type: USER_LOADING
     });
@@ -144,7 +139,6 @@ export const addPublisher = (email, uid) => dispatch => {
                 .catch(err => {
                     dispatch(returnErrors(err.message, err.code));
                 });
-            console.log('added');
         })
         .catch(err => {
             dispatch(returnErrors(err.message, err.code));
@@ -171,7 +165,6 @@ export const removePublisher = (email, uid) => dispatch => {
 };
 
 export const addAdmin = (email, uid) => dispatch => {
-    console.log('adding admin');
     dispatch({
         type: USER_LOADING
     });
@@ -184,7 +177,6 @@ export const addAdmin = (email, uid) => dispatch => {
                 .catch(err => {
                     dispatch(returnErrors(err.message, err.code));
                 });
-            console.log('added admin');
         })
         .catch(err => {
             dispatch(returnErrors(err.message, err.code));
@@ -271,7 +263,6 @@ export const updateUser = (user, userData) => dispatch => {
         dispatch(returnErrors('Such user does not exist', 400));
         return;
     }
-    console.log(user, userData);
     if (userData.email !== user.email) {
         user.updateEmail(userData.email)
             .then(() => {

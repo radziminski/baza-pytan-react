@@ -265,7 +265,7 @@ export class UsersBox extends Component {
                 <Button
                     type="long"
                     onClick={this.loadMoreUsres}
-                    className={this.state.numOfUsers >= this.state.users.length ? 'btn--grey' : ''}
+                    className={this.state.numOfUsers > this.state.users.length ? 'btn--grey' : ''}
                 >
                     Załaduj więcej uzytkowników
                 </Button>

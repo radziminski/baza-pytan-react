@@ -5,7 +5,6 @@ const UserNavBar = props => {
     if (window.innerWidth < 800) return <Fragment />;
     return (
         <div className="user-nav-bar">
-            {console.log(props.history.location.pathname)}
             <ul className="user-nav-bar__list">
                 <li
                     className={`user-nav-bar__link ${

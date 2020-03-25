@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import LoginTextInput from './LoginTextInput.js';
-import { IoMdPerson, IoMdLock } from 'react-icons/io';
+import { IoMdLock } from 'react-icons/io';
 import { connect } from 'react-redux';
 import { changePassword } from '../actions/authActions';
 import { Loader } from './Loader';

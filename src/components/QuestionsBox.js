@@ -117,9 +117,9 @@ export class QuestionsBox extends Component {
         }
     };
 
-    onEditedQuestion = id => {
-        const position = this.props.questions.findIndex(el => el.id === id);
-        this.setState({ editedPosition: position });
+    onEditedQuestion = index => {
+        //const position = this.props.questions.findIndex(el => el.id === id);
+        this.setState({ editedPosition: index });
     };
 
     resetEditingQuestion = () => {
@@ -245,6 +245,7 @@ export class QuestionsBox extends Component {
                                   console.error('Cant confirm question if not in reviews mode');
                               }
                     }
+                    type={this.props.type}
                 />
             );
         }
@@ -252,9 +253,7 @@ export class QuestionsBox extends Component {
             <Button
                 onClick={
                     this.state.numOfQuestions >= questionsToRender.length
-                        ? () => {
-                              console.log('no more question to show');
-                          }
+                        ? () => {}
                         : this.loadMoreQuestions
                 }
                 className={this.state.numOfQuestions >= questionsToRender.length ? 'btn--grey' : ''}
@@ -269,9 +268,7 @@ export class QuestionsBox extends Component {
                     <Button
                         onClick={
                             this.state.numOfQuestions >= questionsToRender.length
-                                ? () => {
-                                      console.log('no more question to show');
-                                  }
+                                ? () => {}
                                 : this.loadMoreQuestions
                         }
                         className={
@@ -292,9 +289,7 @@ export class QuestionsBox extends Component {
                     <Button
                         onClick={
                             this.state.numOfQuestions >= questionsToRender.length
-                                ? () => {
-                                      console.log('no more question to show');
-                                  }
+                                ? () => {}
                                 : this.loadMoreQuestions
                         }
                         className={

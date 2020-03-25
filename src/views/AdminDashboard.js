@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { database } from '../firebase';
 import UsersBox from '../components/UsersBox';
 
 export class AdminDashboard extends Component {
