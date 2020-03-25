@@ -5,5 +5,9 @@
         max-width: 80rem;
         justify-content: space-around;
         margin: 0 auto;
+
+        @include respond(phone) {
+            flex-direction: column;
+        }
     }
 }

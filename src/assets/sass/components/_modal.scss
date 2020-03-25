@@ -1,4 +1,4 @@
-.modal {
+.modal-user {
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -7,4 +7,9 @@
     display: block;
     top: 0;
     left: 0;
+
+    @include respond(tab-port) {
+        opacity: 1;
+        background-color: rgba($color-black, 0.5);
+    }
 }

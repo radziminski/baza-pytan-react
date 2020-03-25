@@ -27,6 +27,21 @@
             transform: scale(1.03);
             border: 1px solid rgba($color-secondary, 0.6);
         }
+
+        @include respond(tab-port) {
+            font-size: 2rem;
+        }
+        @include respond(phone) {
+            font-size: 1.8rem;
+            width: 95%;
+        }
+    }
+
+    &__input {
+        font: inherit;
+        font-size: 2rem;
+        padding: 0.5rem;
+        height: 100%;
     }
 
     &__field-title {
@@ -40,6 +55,10 @@
         width: 90%;
         max-width: 60rem;
         margin: 2rem auto;
+        @include respond(phone) {
+            flex-direction: column;
+            align-items: center;
+        }
     }
 
     &__btn-icon {

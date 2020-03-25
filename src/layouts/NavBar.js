@@ -84,7 +84,7 @@ export class NavBar extends Component {
                     {rightCorner}
                 </header>
                 {this.state.showUserMenu ? (
-                    <div className="modal" onClick={this.hideUserMenu}></div>
+                    <div className="modal-user" onClick={this.hideUserMenu}></div>
                 ) : null}
             </Fragment>
         );

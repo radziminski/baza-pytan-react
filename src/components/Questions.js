@@ -10,8 +10,15 @@ const Questions = props => {
         </span>
     );
 
-    const msg = <h3 className="u-centered">Nie znaleziono żadnych pytań.</h3>;
-    const msg2 = <h3 className="u-centered">Nie ma żadnych pytań.</h3>;
+    let msg = <h3 className="u-centered">Nie znaleziono żadnych pytań.</h3>;
+    if (props.type === 'private')
+        msg = (
+            <h3 className="u-centered" style={{ width: '90%', maxWidth: '90rem' }}>
+                Nie znaleziono żadnych pytań. Jeśli dodałeś/aś pytanie, i nie możesz go znaleźć,
+                prawdopodobnie zostało usunięte lub zatwierdzone przez recenzenta - być może
+                znajduję się w puli wszystkich pytań.{' '}
+            </h3>
+        );
 
     return (
         <div className="questions-container">

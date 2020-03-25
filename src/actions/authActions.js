@@ -10,7 +10,8 @@ import {
     PUBLISHER_FAIL,
     ADMIN_LOADED,
     PUBLISHER_LOADED,
-    UPDATED_PASSWORD
+    UPDATED_PASSWORD,
+    USER_UPDATED
 } from './types';
 import { auth, database } from '../firebase';
 import { returnErrors } from './errorActions';
@@ -251,11 +252,61 @@ export const deleteUser = user => dispatch => {
     }
     user.delete()
         .then(() => {
-            dispatch({
-                type: LOGOUT_SUCCESS
-            });
+            database
+                .ref(`users/${user.uid}`)
+                .remove()
+                .then(() => {
+                    dispatch({
+                        type: LOGOUT_SUCCESS
+                    });
+                });
         })
         .catch(err => {
             dispatch(returnErrors(err.message, err.code));
         });
+};
+
+export const updateUser = (user, userData) => dispatch => {
+    if (!user) {
+        dispatch(returnErrors('Such user does not exist', 400));
+        return;
+    }
+    console.log(user, userData);
+    if (userData.email !== user.email) {
+        user.updateEmail(userData.email)
+            .then(() => {
+                database
+                    .ref(`users/${user.uid}`)
+                    .update({
+                        ...userData
+                    })
+                    .then(() => {
+                        dispatch({
+                            type: USER_UPDATED,
+                            payload: userData
+                        });
+                    })
+                    .catch(err => {
+                        throw new Error(err.message, err.code);
+                    });
+            })
+            .catch(err => {
+                dispatch(returnErrors(err.message, err.code));
+            });
+    } else {
+        database
+            .ref(`users/${user.uid}`)
+            .update({
+                ...userData
+            })
+            .then(() => {
+                dispatch({
+                    type: USER_UPDATED,
+                    payload: userData
+                });
+            })
+            .catch(err => {
+                dispatch(returnErrors(err.message, err.code));
+            });
+    }
 };

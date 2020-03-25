@@ -11,7 +11,8 @@ import {
     ADMIN_LOADED,
     PUBLISHER_FAIL,
     PUBLISHER_LOADED,
-    UPDATED_PASSWORD
+    UPDATED_PASSWORD,
+    USER_UPDATED
 } from '../actions/types';
 
 const initialState = {
@@ -90,6 +91,13 @@ export default function(state = initialState, action) {
                 isLoading: false
             };
         }
+        case USER_UPDATED:
+            const newUser = { ...state.user, ...action.payload };
+
+            return {
+                ...state,
+                user: newUser
+            };
         default:
             return state;
     }

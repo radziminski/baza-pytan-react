@@ -1,5 +1,5 @@
 .filter {
-    width: 90%;
+    width: 100%;
     max-width: 70rem;
     margin: 4rem auto;
     text-align: center;
@@ -8,6 +8,10 @@
     justify-content: center;
     flex-direction: row-reverse;
     position: relative;
+
+    @include respond(tab-port) {
+        justify-content: stretch;
+    }
 
     &__text {
         display: block;
@@ -22,6 +26,16 @@
         border-radius: 3rem;
         cursor: pointer;
         user-select: none;
+
+        @include respond(tab-port) {
+            transform: translateX(-3.5rem);
+        }
+
+        &--txt {
+            @include respond(phone) {
+                display: none;
+            }
+        }
     }
 
     &__input {

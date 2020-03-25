@@ -6,11 +6,25 @@
     margin-right: -50%;
     transform: translate(-50%, -50%);
     background-color: papayawhip;
-
+    z-index: 700;
     &__window {
-        width: 100%;
-        height: 100%;
+        width: 70vw;
+        height: 60vh;
+        max-width: 100rem;
+        max-height: 20rem;
         text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        @include respond(phone) {
+            max-height: 40vh;
+
+            padding: 1rem;
+        }
+        @include respond(small-phone) {
+            max-height: 60vh;
+        }
     }
 
     &__btns {

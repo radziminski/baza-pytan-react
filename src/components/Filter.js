@@ -24,7 +24,8 @@ export class Filter extends Component {
         return (
             <div className="filter">
                 <div className="filter__text">
-                    <GoSearch className="filter__icon" /> Szukaj!{' '}
+                    <GoSearch className="filter__icon" />{' '}
+                    <span className="filter__text--txt">Szukaj! </span>
                 </div>
                 <input
                     className="filter__input js--filter-input"

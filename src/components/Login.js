@@ -1,8 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { IoMdPerson, IoMdLock } from 'react-icons/io';
 import { MdEmail } from 'react-icons/md';
-import { auth } from '../firebase';
-import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { loginUser, registerUser } from '../actions/authActions';
 import LoginTextInput from './LoginTextInput';

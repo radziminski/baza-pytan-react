@@ -2,7 +2,13 @@ import React, { Component } from 'react';
 import { database } from '../firebase';
 import { IoMdPerson } from 'react-icons/io';
 import { FaBookReader, FaAngleDoubleDown } from 'react-icons/fa';
-import { addPublisher, removePublisher, addAdmin, removeAdmin } from '../actions/authActions';
+import {
+    addPublisher,
+    removePublisher,
+    addAdmin,
+    removeAdmin,
+    deleteUser
+} from '../actions/authActions';
 import { connect } from 'react-redux';
 import Button from './Button';
 import Filter from './Filter';
@@ -78,12 +84,18 @@ export class UsersBox extends Component {
         this.setState({ filterInput: input, isFiltering: false });
     };
 
-    onDeleteUser = () => {};
+    onDeleteUser = id => {
+        window.alert(
+            'Niestety funkcja usuwania użytkowników nie została jak na razie aktywowana. W celu usunięcia użytkownika skontaktuj się z administratorem.'
+        );
+        this.setState({ isLoading: false, showModal: false });
+    };
 
     onDowngradeUser = user => {
         this.setState({ isLoading: true, showModal: false });
         if (user.isAdmin) this.props.removeAdmin(user.email, user.id);
         else if (user.isPublisher) this.props.removePublisher(user.email, user.id);
+        else this.onDeleteUser();
     };
 
     onUpgradeUser = user => {
@@ -266,6 +278,10 @@ const mapStateToProps = state => ({
     myEmail: state.auth.user ? state.auth.user.email : ''
 });
 
-export default connect(mapStateToProps, { addPublisher, removePublisher, addAdmin, removeAdmin })(
-    UsersBox
-);
+export default connect(mapStateToProps, {
+    addPublisher,
+    removePublisher,
+    addAdmin,
+    removeAdmin,
+    deleteUser
+})(UsersBox);

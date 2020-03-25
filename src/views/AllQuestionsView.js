@@ -1,14 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import QuestionsBox from '../components/QuestionsBox';
 import { Footer } from '../layouts/Footer';
-import { Redirect, Link, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Login from '../components/Login';
 import NavBar from '../layouts/NavBar';
 import { connect } from 'react-redux';
 import { loadUser } from '../actions/authActions';
 import { auth } from '../firebase';
 import AccountDashboard from './AccountDashboard';
-import UserNavBar from '../layouts/UserNavBar';
 import AdminDashboard from './AdminDashboard';
 import PasswordReset from '../components/PasswordReset';
 

@@ -17,6 +17,13 @@
         cursor: pointer;
         transition: color 0.2s;
 
+        @include respond(tab-land) {
+            margin-right: 2.5rem;
+        }
+        @include respond(tab-port) {
+            margin-right: 1.5rem;
+        }
+
         &:after {
             content: '';
             display: block;

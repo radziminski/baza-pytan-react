@@ -8,6 +8,13 @@
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
 
+    @include respond(tab-land) {
+        padding: 1.8rem 3rem;
+    }
+    @include respond(phone) {
+        padding: 1.8rem 1.5rem;
+    }
+
     &--sticked {
         position: fixed;
         width: 100vw;

@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import Filrer from './Filter';
 import Button from './Button';
 import Questions from './Questions';
-import { database, backendFunctions } from '../firebase';
 import AddQestionCard from './AddQestionCard';
 import { connect } from 'react-redux';
 import {
@@ -156,7 +155,7 @@ export class QuestionsBox extends Component {
     // FILTERING
 
     onFilterChange = input => {
-        if (input.length && input[0].length > 1) {
+        if (input.length && input[0].length > 0) {
             this.setState({
                 filterInput: input,
                 isFiltering: true,
@@ -175,12 +174,12 @@ export class QuestionsBox extends Component {
         // FILTERING QUESTIONS
         let questionsToRender = this.props.questions.filter(el => {
             if (this.state.filterInput.length === 0) return true;
-            if (this.state.filterInput[0].length < 2) return true;
+            if (this.state.filterInput[0].length < 1) return true;
             let flag = false;
             if (el.keyWords && el.keyWords.forEach)
                 el.keyWords.forEach(keyWord => {
                     this.state.filterInput.forEach(key => {
-                        if (keyWord.toLowerCase().includes(key.toLowerCase()) && key.length > 1)
+                        if (keyWord.toLowerCase().includes(key.toLowerCase()) && key.length > 0)
                             flag = true;
                     });
                 });
@@ -188,9 +187,10 @@ export class QuestionsBox extends Component {
                 if (
                     el.question &&
                     el.question.toLowerCase().includes(key.toLowerCase()) &&
-                    key.length > 1
+                    key.length > 0
                 )
                     flag = true;
+                if (el.number && key.toLowerCase() === el.number + '') flag = true;
             });
 
             return flag;
@@ -222,6 +222,7 @@ export class QuestionsBox extends Component {
                               console.error('Cant confirm question if not in reviews mode');
                           }
                 }
+                type={this.props.type}
             />
         );
         if (this.state.editedPosition || this.state.editedPosition === 0) {
