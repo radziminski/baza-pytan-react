@@ -10,6 +10,7 @@ import { auth } from '../firebase';
 import AccountDashboard from './AccountDashboard';
 import UserNavBar from '../layouts/UserNavBar';
 import AdminDashboard from './AdminDashboard';
+import PasswordReset from '../components/PasswordReset';
 
 export class AllQuestionsView extends Component {
     componentDidMount() {
@@ -29,6 +30,7 @@ export class AllQuestionsView extends Component {
                                 <Route path="/login" component={Login} />
                                 <Route path="/account" component={AccountDashboard} />
                                 <Route path="/admin" component={AdminDashboard} />
+                                <Route path="/change" component={PasswordReset} />
                                 <Route
                                     path="/prywatne"
                                     render={props => <QuestionsBox {...props} type={'private'} />}

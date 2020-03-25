@@ -9,7 +9,8 @@ import {
     REGISTER_FAIL,
     PUBLISHER_FAIL,
     ADMIN_LOADED,
-    PUBLISHER_LOADED
+    PUBLISHER_LOADED,
+    UPDATED_PASSWORD
 } from './types';
 import { auth, database } from '../firebase';
 import { returnErrors } from './errorActions';
@@ -17,8 +18,10 @@ import { backendFunctions } from '../firebase';
 
 // Load User
 export const loadUser = user => dispatch => {
+    dispatch({
+        type: USER_LOADING
+    });
     const user = auth.currentUser;
-
     if (user) {
         user.getIdTokenResult()
             .then(idTokenResult => {
@@ -88,6 +91,9 @@ export const loginUser = (email, password) => dispatch => {
 };
 
 export const logOut = () => dispatch => {
+    dispatch({
+        type: USER_LOADING
+    });
     auth.signOut()
         .then(() => {
             dispatch({
@@ -101,6 +107,9 @@ export const logOut = () => dispatch => {
 };
 
 export const registerUser = userData => dispatch => {
+    dispatch({
+        type: USER_LOADING
+    });
     auth.createUserWithEmailAndPassword(userData.email, userData.password)
         .then(cred => cred.user)
         .then(user => {
@@ -122,6 +131,9 @@ export const registerUser = userData => dispatch => {
 
 export const addPublisher = (email, uid) => dispatch => {
     console.log('adding');
+    dispatch({
+        type: USER_LOADING
+    });
     backendFunctions
         .httpsCallable('addPublisherRole')({ email })
         .then(() => {
@@ -139,6 +151,9 @@ export const addPublisher = (email, uid) => dispatch => {
 };
 
 export const removePublisher = (email, uid) => dispatch => {
+    dispatch({
+        type: USER_LOADING
+    });
     backendFunctions
         .httpsCallable('removePublisherRole')({ email })
         .then(() => {
@@ -156,6 +171,9 @@ export const removePublisher = (email, uid) => dispatch => {
 
 export const addAdmin = (email, uid) => dispatch => {
     console.log('adding admin');
+    dispatch({
+        type: USER_LOADING
+    });
     backendFunctions
         .httpsCallable('addAdminRole')({ email })
         .then(() => {
@@ -173,6 +191,9 @@ export const addAdmin = (email, uid) => dispatch => {
 };
 
 export const removeAdmin = (email, uid) => dispatch => {
+    dispatch({
+        type: USER_LOADING
+    });
     backendFunctions
         .httpsCallable('removeAdminRole')({ email })
         .then(() => {
@@ -182,6 +203,57 @@ export const removeAdmin = (email, uid) => dispatch => {
                 .catch(err => {
                     dispatch(returnErrors(err.message, err.code));
                 });
+        })
+        .catch(err => {
+            dispatch(returnErrors(err.message, err.code));
+        });
+};
+
+export const changePassword = (user, newPassword, newPasswordConf, callback) => dispatch => {
+    dispatch({
+        type: USER_LOADING
+    });
+    if (!user) {
+        dispatch(returnErrors('Użytkownik nie jest zalogowany', 400));
+        dispatch({
+            type: UPDATED_PASSWORD
+        });
+        return;
+    }
+    if (newPassword !== newPasswordConf) {
+        dispatch(returnErrors('Hasła nie są takie same. Wprowadź to samo hasło w oba pola.', 400));
+        dispatch({
+            type: UPDATED_PASSWORD
+        });
+        return;
+    }
+    if (user) {
+        user.updatePassword(newPassword)
+            .then(() => {
+                callback();
+                dispatch({
+                    type: UPDATED_PASSWORD
+                });
+            })
+            .catch(err => {
+                dispatch({
+                    type: UPDATED_PASSWORD
+                });
+                dispatch(returnErrors(err.message, err.code));
+            });
+    }
+};
+
+export const deleteUser = user => dispatch => {
+    if (!user) {
+        dispatch(returnErrors('Such user does not exist', 400));
+        return;
+    }
+    user.delete()
+        .then(() => {
+            dispatch({
+                type: LOGOUT_SUCCESS
+            });
         })
         .catch(err => {
             dispatch(returnErrors(err.message, err.code));

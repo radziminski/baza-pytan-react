@@ -6,6 +6,7 @@ import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { loginUser, registerUser } from '../actions/authActions';
 import LoginTextInput from './LoginTextInput';
+import { Loader } from './Loader';
 
 export class Login extends Component {
     state = {
@@ -36,7 +37,6 @@ export class Login extends Component {
                 lastName: this.state.lastName,
                 city: this.state.city
             });
-        if (!this.props.isLoading) this.props.history.push('/');
     };
 
     onInputChange = e => {
@@ -106,6 +106,7 @@ export class Login extends Component {
                     label="Hasło:"
                     icon={<IoMdLock className="login__icon" />}
                     required
+                    classType="last"
                 />
             </Fragment>
         );
@@ -155,16 +156,27 @@ export class Login extends Component {
                         onChange={this.onInputChange}
                         label="Miejscowość zamieszkania:"
                         icon={<MdEmail className="login__icon" />}
+                        classType="last"
                     />
                 </Fragment>
             );
         }
+        let loading = (
+            <div className="u-centered">
+                <Loader />
+            </div>
+        );
+        if (!this.props.isLoading)
+            loading = this.props.errorMsg.length ? (
+                <h3 className="login__msg">{this.props.errorMsg}</h3>
+            ) : null;
 
         return (
             <form className="login" onSubmit={this.onSubmit}>
                 {btns}
                 <h2 className="login__title">{title}</h2>
                 {inputFields}
+                {loading}
                 <button type="submit" className="btn btn--full">
                     Wyślij
                 </button>
@@ -176,8 +188,9 @@ export class Login extends Component {
 }
 
 const mapStateToProps = state => ({
-    loading: state.auth.isLoading,
-    isAuthenticated: state.auth.isAuthenticated
+    isLoading: state.auth.isLoading,
+    isAuthenticated: state.auth.isAuthenticated,
+    errorMsg: state.error.msg
 });
 
 export default connect(mapStateToProps, { loginUser, registerUser })(Login);

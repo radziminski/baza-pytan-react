@@ -12,7 +12,11 @@ export class LoginTextInput extends Component {
 
     render() {
         return (
-            <div className="login__input-box">
+            <div
+                className={`login__input-box ${
+                    this.props.classType ? 'login__input-box--' + this.props.classType : ''
+                }`}
+            >
                 <input
                     type={this.props.type}
                     className="login__input"

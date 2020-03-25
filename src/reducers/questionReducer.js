@@ -4,7 +4,7 @@ import {
     NEW_PUBLIC_QUESTION,
     DELETE_QUESTION,
     UPDATE_QUESTION,
-    QUESTIONS_FETCHING
+    QUESTIONS_LOADING
 } from '../actions/types';
 
 const initialState = {
@@ -16,7 +16,7 @@ const initialState = {
 export default function(state = initialState, action) {
     let newItems = [...state.items];
     switch (action.type) {
-        case QUESTIONS_FETCHING:
+        case QUESTIONS_LOADING:
             return {
                 ...state,
                 isFetching: true
@@ -32,20 +32,24 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 items: newItems,
-                item: action.payload
+                item: action.payload,
+                isFetching: false
             };
         case NEW_PUBLIC_QUESTION:
+            if (!action.payload) return state;
             newItems.push(action.payload);
             return {
                 ...state,
                 items: newItems,
-                item: action.payload
+                item: action.payload,
+                isFetching: false
             };
         case DELETE_QUESTION:
             newItems = newItems.filter(el => el.id !== action.payload);
             return {
                 ...state,
-                items: newItems
+                items: newItems,
+                isFetching: false
             };
         case UPDATE_QUESTION:
             let newItemIndex = newItems.findIndex(el => el.id === action.payload.id);
@@ -56,7 +60,8 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 items: newItems,
-                item: newItems[newItemIndex]
+                item: newItems[newItemIndex],
+                isFetching: false
             };
         default:
             return state;

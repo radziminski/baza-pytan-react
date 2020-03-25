@@ -5,27 +5,30 @@ import {
     QUESTION_ERROR,
     NEW_PUBLIC_QUESTION,
     UPDATE_QUESTION,
-    QUESTIONS_FETCHING
+    QUESTIONS_LOADING
 } from './types';
 import { database } from '../firebase';
 import { returnErrors } from '../actions/errorActions';
 
 export const fetchPublicQuestions = () => dispatch => {
     dispatch({
-        type: QUESTIONS_FETCHING
+        type: QUESTIONS_LOADING
     });
     database
         .ref('publicQuestions')
+        .orderByChild('createdAt')
         .once('value')
         .then(data => data.val())
         .then(questions => {
             console.log('PUBLIC:', questions);
             const newQuestions = [];
+            let counter = 0;
             for (let question in questions) {
                 newQuestions.push({
                     ...questions[question],
                     id: question,
-                    isDeletable: false
+                    isDeletable: false,
+                    number: ++counter
                 });
             }
             dispatch({
@@ -44,7 +47,7 @@ export const fetchPublicQuestions = () => dispatch => {
 export const fetchMyReviewQuestions = uid => dispatch => {
     console.log('GETTING Q FROM: ', uid);
     dispatch({
-        type: QUESTIONS_FETCHING
+        type: QUESTIONS_LOADING
     });
     if (!uid) {
         console.error('Getting questions without beeing authenticated!');
@@ -81,7 +84,7 @@ export const fetchMyReviewQuestions = uid => dispatch => {
 
 export const fetchAllReviewQuestions = () => dispatch => {
     dispatch({
-        type: QUESTIONS_FETCHING
+        type: QUESTIONS_LOADING
     });
 
     database
@@ -113,6 +116,9 @@ export const fetchAllReviewQuestions = () => dispatch => {
 
 export const createReviewQuestion = (question, user) => dispatch => {
     console.log('SENDER', user);
+    // dispatch({
+    //     type: QUESTIONS_LOADING
+    // });
     const newQuestionRef = database.ref('reviewQuestions').push();
     newQuestionRef
         .set({
@@ -143,8 +149,11 @@ export const createReviewQuestion = (question, user) => dispatch => {
         });
 };
 
-export const createPublicQuestion = (question, user) => dispatch => {
+export const createPublicQuestion = (question, user, addToCurrItems = true) => dispatch => {
     console.log('SENDER', user);
+    // dispatch({
+    //     type: QUESTIONS_LOADING
+    // });
     if (!question.id) console.error('CANT MAKE QUESTION PUBLIC WITHOUT ITS ID');
     const newQuestionRef = database.ref('publicQuestions').push();
     newQuestionRef
@@ -152,17 +161,23 @@ export const createPublicQuestion = (question, user) => dispatch => {
             question: question.question,
             answer: question.answer,
             keyWords: question.keyWords || [],
-            uid: user.uid || 'brak danych',
+            reviewer: user.uid || 'brak danych',
             author: question.uid || 'brak danych',
             createdAt: Date.now()
         })
         .then(data => {
             const newQuestion = { ...question };
             newQuestion.id = newQuestionRef.key;
-            dispatch({
-                type: NEW_PUBLIC_QUESTION,
-                payload: newQuestion
-            });
+            if (!addToCurrItems) {
+                dispatch({
+                    type: NEW_PUBLIC_QUESTION
+                });
+            } else {
+                dispatch({
+                    type: NEW_PUBLIC_QUESTION,
+                    payload: newQuestion
+                });
+            }
         })
         .catch(err => {
             dispatch(returnErrors(err.message, err.code));
@@ -173,6 +188,9 @@ export const createPublicQuestion = (question, user) => dispatch => {
 };
 
 export const deleteQuestion = (id, databaseName) => dispatch => {
+    dispatch({
+        type: QUESTIONS_LOADING
+    });
     database
         .ref(`${databaseName}/${id}`)
         .remove(data => {

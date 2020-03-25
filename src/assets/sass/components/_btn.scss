@@ -1,7 +1,7 @@
 .btn {
     display: block;
     width: 80%;
-    max-width: 30rem;
+    max-width: 25rem;
     outline: none;
     text-decoration: none;
     border: none;
@@ -18,6 +18,10 @@
 
     &:hover {
         transform: scale(1.03);
+    }
+
+    &--long {
+        max-width: 30rem;
     }
 
     &--grey {

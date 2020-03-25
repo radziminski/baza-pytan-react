@@ -24,8 +24,11 @@ export class QuestionsBox extends Component {
         isFiltering: true,
         numOfQuestions: this.defaultQuestionsPerPage,
         type: 'public',
-        editedPosition: null
+        editedPosition: null,
+        editMode: false
     };
+
+    // COMPONENT LIFECYCLE
 
     componentDidMount() {
         this.loadQuestions(this.props.type);
@@ -34,7 +37,6 @@ export class QuestionsBox extends Component {
     }
 
     componentDidUpdate() {
-        console.log(this.props.questions);
         if (this.props.type !== this.state.type) {
             this.setState({ type: this.props.type, isFiltering: this.props.isFetching });
             this.loadQuestions(this.props.type);
@@ -43,8 +45,9 @@ export class QuestionsBox extends Component {
             if (this.state.isFiltering !== this.props.isFetching)
                 this.setState({ isFiltering: this.props.isFetching });
         }
-        console.log('QUESTIONS', this.props.questions);
     }
+
+    // FETCHING QUESTIONS
 
     loadQuestions = type => {
         switch (type) {
@@ -69,6 +72,12 @@ export class QuestionsBox extends Component {
         this.resetQuestionsNum();
     };
 
+    // ADDING, EDITING, DELETEING NEW QUESTION
+
+    toggleEditMode = () => {
+        this.setState({ editMode: !this.state.editMode });
+    };
+
     onAddingQuestion = () => {
         this.setState({ addingQuestion: true });
     };
@@ -78,7 +87,6 @@ export class QuestionsBox extends Component {
     };
 
     onAddedQuestion = (question, id = null) => {
-        console.log('ADDDING', question, id, this.props.user);
         if (!this.props.user || !this.props.user.uid) return;
         if (this.state.type === 'private') {
             !id
@@ -93,24 +101,6 @@ export class QuestionsBox extends Component {
         }
         this.onEndAddQuestion();
         this.resetEditingQuestion();
-    };
-
-    loadMoreQuestions = () => {
-        const oldQuestionsNum = this.state.numOfQuestions;
-        this.setState({ numOfQuestions: oldQuestionsNum + 3 });
-    };
-
-    resetQuestionsNum = () => {
-        if (this.state.numOfQuestions !== this.defaultQuestionsPerPage)
-            this.setState({ numOfQuestions: this.defaultQuestionsPerPage });
-    };
-
-    onFilterChange = input => {
-        if (input.length && input[0].length > 1) {
-            this.setState({ filterInput: input, isFiltering: true });
-            return;
-        }
-        this.setState({ filterInput: input, isFiltering: false });
     };
 
     onDeleteQuestion = id => {
@@ -137,37 +127,55 @@ export class QuestionsBox extends Component {
         this.setState({ editedPosition: null });
     };
 
+    // REVIEW MODE - CONFIRMING QUESTION
+
+    onConfirmQuestion = id => {
+        if (!this.props.user) {
+            console.error('Cannot add public question if not a reviewr!');
+            return;
+        }
+        const question = this.props.questions.find(el => el.id === id);
+        this.props.deleteQuestion(id, 'reviewQuestions');
+        this.props.createPublicQuestion(question, this.props.user, false);
+        this.onEndAddQuestion();
+        this.resetEditingQuestion();
+    };
+
+    // DISPLAYING PROPER NUMBER OF QUESTIONS
+
+    loadMoreQuestions = () => {
+        const oldQuestionsNum = this.state.numOfQuestions;
+        this.setState({ numOfQuestions: oldQuestionsNum + 3 });
+    };
+
+    resetQuestionsNum = () => {
+        if (this.state.numOfQuestions !== this.defaultQuestionsPerPage)
+            this.setState({ numOfQuestions: this.defaultQuestionsPerPage });
+    };
+
+    // FILTERING
+
+    onFilterChange = input => {
+        if (input.length && input[0].length > 1) {
+            this.setState({
+                filterInput: input,
+                isFiltering: true,
+                numOfQuestions: this.defaultQuestionsPerPage
+            });
+            return;
+        }
+        this.setState({
+            filterInput: input,
+            isFiltering: false,
+            numOfQuestions: this.defaultQuestionsPerPage
+        });
+    };
+
     render() {
-        let btns = (
-            <Button
-                onClick={this.loadMoreQuestions}
-                className={
-                    this.state.numOfQuestions >= this.props.questions.length ? 'btn--grey' : ''
-                }
-            >
-                Załaduj więcej pytań
-            </Button>
-        );
-        if ((this.props.isAdmin || this.state.type === 'private') && this.state.type !== 'review')
-            btns = (
-                <div className="questions-box__btns">
-                    <Button onClick={this.onAddingQuestion}>Dodaj pytanie</Button>
-                    <Button
-                        onClick={this.loadMoreQuestions}
-                        className={
-                            this.state.numOfQuestions >= this.props.questions.length
-                                ? 'btn--grey'
-                                : ''
-                        }
-                    >
-                        Załaduj więcej pytań
-                    </Button>
-                </div>
-            );
+        // FILTERING QUESTIONS
         let questionsToRender = this.props.questions.filter(el => {
             if (this.state.filterInput.length === 0) return true;
             if (this.state.filterInput[0].length < 2) return true;
-            this.resetQuestionsNum();
             let flag = false;
             if (el.keyWords && el.keyWords.forEach)
                 el.keyWords.forEach(keyWord => {
@@ -187,21 +195,33 @@ export class QuestionsBox extends Component {
 
             return flag;
         });
-        if (questionsToRender && questionsToRender.length > this.state.numOfQuestions) {
-            questionsToRender.splice(this.state.numOfQuestions);
-        }
+
+        // IF USER IS ADDING QUESTION
         let addQuestionCard = null;
         if (this.state.addingQuestion) {
             addQuestionCard = (
                 <AddQestionCard onClose={this.onEndAddQuestion} onSubmit={this.onAddedQuestion} />
             );
         }
+
+        if (this.state.editMode)
+            questionsToRender = questionsToRender.map(el => ({ ...el, isDeletable: true }));
+
+        // Mapping objects into components
         let questionsRender = (
             <Questions
                 questions={questionsToRender}
                 onDeleteQuestion={this.onDeleteQuestion}
                 onEditQuestion={this.onEditedQuestion}
                 showLoader={this.state.isFiltering}
+                extended={this.props.type === 'review'}
+                onConfirmQuestion={
+                    this.props.type === 'review'
+                        ? this.onConfirmQuestion
+                        : () => {
+                              console.error('Cant confirm question if not in reviews mode');
+                          }
+                }
             />
         );
         if (this.state.editedPosition || this.state.editedPosition === 0) {
@@ -216,11 +236,79 @@ export class QuestionsBox extends Component {
                         onClose: this.resetEditingQuestion,
                         onSubmit: this.onAddedQuestion
                     }}
+                    extended={this.props.type === 'review'}
+                    onConfirmQuestion={
+                        this.props.type === 'review'
+                            ? this.onConfirmQuestion
+                            : () => {
+                                  console.error('Cant confirm question if not in reviews mode');
+                              }
+                    }
                 />
             );
         }
-        console.log(this.props.questions);
-        console.log(questionsToRender);
+        let btns = (
+            <Button
+                onClick={
+                    this.state.numOfQuestions >= questionsToRender.length
+                        ? () => {
+                              console.log('no more question to show');
+                          }
+                        : this.loadMoreQuestions
+                }
+                className={this.state.numOfQuestions >= questionsToRender.length ? 'btn--grey' : ''}
+            >
+                Załaduj więcej pytań
+            </Button>
+        );
+        if (this.state.type === 'private')
+            btns = (
+                <div className="questions-box__btns">
+                    <Button onClick={this.onAddingQuestion}>Dodaj pytanie</Button>
+                    <Button
+                        onClick={
+                            this.state.numOfQuestions >= questionsToRender.length
+                                ? () => {
+                                      console.log('no more question to show');
+                                  }
+                                : this.loadMoreQuestions
+                        }
+                        className={
+                            this.state.numOfQuestions >= questionsToRender.length ? 'btn--grey' : ''
+                        }
+                    >
+                        Załaduj więcej pytań
+                    </Button>
+                </div>
+            );
+        else if (this.state.type !== 'review' && this.props.isPublisher) {
+            btns = (
+                <div className="questions-box__btns">
+                    <Button onClick={() => this.toggleEditMode()}>
+                        {this.state.editMode ? 'Wyłącz ' : 'Włącz '}tryb edycji
+                    </Button>
+                    <Button onClick={this.onAddingQuestion}>Dodaj pytanie</Button>
+                    <Button
+                        onClick={
+                            this.state.numOfQuestions >= questionsToRender.length
+                                ? () => {
+                                      console.log('no more question to show');
+                                  }
+                                : this.loadMoreQuestions
+                        }
+                        className={
+                            this.state.numOfQuestions >= questionsToRender.length ? 'btn--grey' : ''
+                        }
+                    >
+                        Załaduj więcej pytań
+                    </Button>
+                </div>
+            );
+        }
+        if (questionsToRender && questionsToRender.length > this.state.numOfQuestions) {
+            questionsToRender.splice(this.state.numOfQuestions);
+        }
+
         return (
             <Fragment>
                 {/* <h1 className="heading-primary js--heading">Baza pytań</h1> */}

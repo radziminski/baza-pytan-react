@@ -51,7 +51,7 @@
         width: 100%;
         display: block;
         max-width: 40rem;
-        margin: 2rem auto 5rem auto;
+        margin: 2rem auto 4.5rem auto;
 
         &:after {
             position: absolute;
@@ -64,8 +64,9 @@
             top: 50%;
             transform: translateY(-50%);
         }
-        &:last-child {
-            margin-bottom: 3rem;
+
+        &--last {
+            margin: 2rem auto 3rem auto;
         }
     }
 
@@ -109,5 +110,15 @@
         color: rgba($color-grey, 0.8);
         transform: translateY(-50%);
         font-size: 2.6rem;
+    }
+
+    &__msg {
+        font-size: 1.8rem;
+        font-weight: 400;
+        color: $color-red;
+        width: 90%;
+        max-width: 50rem;
+        text-align: center;
+        margin: -1rem auto 2rem auto;
     }
 }

@@ -1,7 +1,8 @@
-import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import React, { Fragment } from 'react';
+import { withRouter } from 'react-router-dom';
 
 const UserNavBar = props => {
+    if (window.innerWidth < 800) return <Fragment />;
     return (
         <div className="user-nav-bar">
             {console.log(props.history.location.pathname)}

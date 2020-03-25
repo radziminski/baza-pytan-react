@@ -15,34 +15,56 @@ const Questions = props => {
 
     return (
         <div className="questions-container">
-            {props.questions.length === 0 ? (props.showLoader ? loader : msg) : null}
-
-            {props.questions.map((el, index) => {
-                if (props.editedPosition === index) {
-                    return (
-                        <AddQestionCard
-                            question={el.question}
-                            answer={el.answer}
-                            keyWords={el.keyWords}
-                            key={el.id}
-                            onClose={props.methods.onClose}
-                            onSubmit={question => props.methods.onSubmit(question, el.id)}
-                        />
-                    );
-                }
-                return (
-                    <QuestionCard
-                        key={el.id}
-                        id={el.id}
-                        question={el.question}
-                        answer={el.answer}
-                        keyWords={el.keyWords}
-                        onDelete={() => props.onDeleteQuestion(el.id)}
-                        onEdit={() => props.onEditQuestion(el.id)}
-                        isDeletable={el.isDeletable !== false}
-                    />
-                );
-            })}
+            {/* {props.questions.length === 0 ? (props.showLoader ? loader : msg) : null} */}
+            {props.showLoader
+                ? loader
+                : props.questions.length === 0
+                ? msg
+                : props.questions.map((el, index) => {
+                      if (props.editedPosition === index) {
+                          return (
+                              <AddQestionCard
+                                  question={el.question}
+                                  answer={el.answer}
+                                  keyWords={el.keyWords}
+                                  key={el.id}
+                                  onClose={props.methods.onClose}
+                                  onSubmit={question => props.methods.onSubmit(question, el.id)}
+                                  author={props.extended ? el.creator : null}
+                              />
+                          );
+                      }
+                      if (props.extended) {
+                          return (
+                              <QuestionCard
+                                  key={el.id}
+                                  id={el.id}
+                                  question={el.question}
+                                  answer={el.answer}
+                                  keyWords={el.keyWords}
+                                  onDelete={() => props.onDeleteQuestion(el.id)}
+                                  onEdit={() => props.onEditQuestion(el.id)}
+                                  onConfirm={() => props.onConfirmQuestion(el.id)}
+                                  isDeletable={el.isDeletable !== false}
+                                  author={el.creator}
+                                  number={el.number}
+                              />
+                          );
+                      }
+                      return (
+                          <QuestionCard
+                              key={el.id}
+                              id={el.id}
+                              question={el.question}
+                              answer={el.answer}
+                              keyWords={el.keyWords}
+                              onDelete={() => props.onDeleteQuestion(el.id)}
+                              onEdit={() => props.onEditQuestion(el.id)}
+                              isDeletable={el.isDeletable !== false}
+                              number={el.number}
+                          />
+                      );
+                  })}
         </div>
     );
 };

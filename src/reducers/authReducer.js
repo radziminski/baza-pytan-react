@@ -10,7 +10,8 @@ import {
     ADMIN_FAIL,
     ADMIN_LOADED,
     PUBLISHER_FAIL,
-    PUBLISHER_LOADED
+    PUBLISHER_LOADED,
+    UPDATED_PASSWORD
 } from '../actions/types';
 
 const initialState = {
@@ -60,25 +61,35 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 isAdmin: true,
-                isPublisher: true
+                isPublisher: true,
+                isLoading: false
             };
         case PUBLISHER_LOADED:
             return {
                 ...state,
                 isAdmin: false,
-                isPublisher: true
+                isPublisher: true,
+                isLoading: false
             };
         case ADMIN_FAIL:
             return {
                 ...state,
-                isAdmin: false
+                isAdmin: false,
+                isLoading: false
             };
         case PUBLISHER_FAIL:
             return {
                 ...state,
                 isPublisher: false,
-                isAdmin: false
+                isAdmin: false,
+                isLoading: false
             };
+        case UPDATED_PASSWORD: {
+            return {
+                ...state,
+                isLoading: false
+            };
+        }
         default:
             return state;
     }

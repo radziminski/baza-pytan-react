@@ -3,13 +3,28 @@ import { connect } from 'react-redux';
 import Button from '../components/Button';
 import { MdSettings } from 'react-icons/md';
 import { TiDelete } from 'react-icons/ti';
+import { deleteUser } from '../actions/authActions';
+import Modal from 'react-modal';
+
+const customStyles = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)'
+    }
+};
 
 export class AccountDashboard extends Component {
     state = {
         editMode: false,
         firstName: '',
         lastName: '',
-        city: ''
+        city: '',
+        showModal: false,
+        modalMessage: 'Czy na pewno chcesz USUNĄĆ swoje konto? Tej akcji nie da się cofnąć!'
     };
 
     componentDidMount() {
@@ -17,6 +32,20 @@ export class AccountDashboard extends Component {
             this.props.history.push('/');
         }
     }
+
+    componentDidUpdate() {
+        if (!this.props.isAuthenticated) {
+            this.props.history.push('/');
+        }
+    }
+
+    toggleModal = (togg = true) => {
+        this.setState({ showModal: togg });
+    };
+
+    deleteUser = () => {
+        this.props.deleteUser(this.props.user);
+    };
 
     render() {
         if (!this.props.isAuthenticated) return <Fragment></Fragment>;
@@ -53,7 +82,7 @@ export class AccountDashboard extends Component {
                             <MdSettings className="account-info__btn-icon" />
                             &emsp;&emsp; Edytuj dane
                         </Button>
-                        <Button types={['short', 'delete']}>
+                        <Button types={['short', 'delete']} onClick={this.toggleModal}>
                             <TiDelete className="account-info__btn-icon" />
                             &emsp;&emsp; Usuń konto
                         </Button>
@@ -71,6 +100,29 @@ export class AccountDashboard extends Component {
                             .slice(0, 21)}
                     </h3> */}
                 </div>
+                {console.log(this.state.showModal)}
+                <Modal
+                    isOpen={this.state.showModal}
+                    style={customStyles}
+                    contentLabel="Example Modal"
+                    overlayClassName="modal__overlay"
+                    onRequestClose={() => this.toggleModal(false)}
+                >
+                    <div className="modal__window">
+                        <h2>{this.state.modalMessage}</h2>
+                        <div className="modal__btns">
+                            <Button type="short" onClick={this.deleteUser}>
+                                Tak
+                            </Button>
+                            <Button
+                                types={['delete', 'short']}
+                                onClick={() => this.toggleModal(false)}
+                            >
+                                Anuluj
+                            </Button>
+                        </div>
+                    </div>
+                </Modal>
             </Fragment>
         );
     }
@@ -83,4 +135,4 @@ const mapStateToProps = state => ({
     isPublisher: state.auth.isPublisher
 });
 
-export default connect(mapStateToProps, {})(AccountDashboard);
+export default connect(mapStateToProps, { deleteUser })(AccountDashboard);

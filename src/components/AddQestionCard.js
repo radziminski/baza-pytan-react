@@ -64,9 +64,25 @@ export class AddQestionCard extends Component {
     };
 
     render() {
+        let author = null;
+        if (this.props.author) {
+            author = (
+                <h3 className="question-card__author question-card__author--big">
+                    Autor:&nbsp;&nbsp;
+                    {this.props.author.firstName +
+                        ' ' +
+                        this.props.author.lastName +
+                        ' (' +
+                        this.props.author.email +
+                        ')'}
+                </h3>
+            );
+        }
+
         return (
             <form className="question-card" onSubmit={this.onSubmit}>
-                <input
+                {author}
+                <textarea
                     className="question-card__title question-card__title--input"
                     placeholder="Treść pytania..."
                     value={this.state.question}

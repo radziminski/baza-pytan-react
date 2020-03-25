@@ -251,6 +251,7 @@ export class UsersBox extends Component {
                     usersToRender
                 )}
                 <Button
+                    type="long"
                     onClick={this.loadMoreUsres}
                     className={this.state.numOfUsers >= this.state.users.length ? 'btn--grey' : ''}
                 >
