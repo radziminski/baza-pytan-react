@@ -4,4 +4,5 @@
 /account /
 /admin /
 /change /
-* /
+/* /index.html 200
+/* / 200

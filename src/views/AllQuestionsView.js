@@ -39,6 +39,8 @@ export class AllQuestionsView extends Component {
                                 />
                                 <Route exact path="/" component={QuestionsBox} />
                                 <Route path="/pytania" component={QuestionsBox} />
+                                <Route path="/index.html" component={QuestionsBox} />
+                                <Route component={QuestionsBox} />
                             </Switch>
                         </div>
                     </section>
