@@ -23,13 +23,12 @@
         font-size: 1.7rem;
         font-weight: 300;
         width: 100%;
-        padding: 0.5rem 2rem 0 2rem;
+        padding: 0.7rem 2rem 0 2rem;
         text-align: left;
         background-image: linear-gradient(to right, $color-primary-dark, $color-secondary);
         color: $color-white;
         word-wrap: break-word;
-        margin-bottom: -1rem;
-        letter-spacing: 0.5px;
+        margin-bottom: -0.8rem;
         z-index: 300;
 
         &--big {
@@ -46,6 +45,22 @@
         }
     }
 
+    &__discarded {
+        position: absolute;
+        top: 6.4rem;
+        right: 1rem;
+        font-size: 1.7rem;
+        padding: 0.5rem 1rem;
+        background-color: $color-grey;
+        color: $color-white;
+        border-radius: 5px;
+        box-shadow: 0 1rem 1rem rgba($color-black, 0.1);
+
+        @include respond(phone) {
+            top: 11.4rem;
+        }
+    }
+
     &__confirm-btns {
         width: 100%;
         display: flex;
@@ -54,9 +69,10 @@
     }
 
     &__confirm-btn {
+        font: inherit;
         width: 50%;
         display: block;
-        padding: 1.2rem 2rem;
+        padding: 1rem 2rem;
         outline: none;
         border: none;
         background-image: $gradient-confirm;
@@ -74,11 +90,13 @@
         }
 
         &--delete {
+            font: inherit;
             background-image: $gradient-delete;
         }
     }
 
     &__title {
+        font: inherit;
         font-size: 2.1rem;
         font-weight: 400;
         width: 100%;
@@ -111,6 +129,11 @@
             border: none;
             padding: 1.8rem 2rem;
             word-wrap: break-word;
+        }
+
+        &--discarded {
+            background-image: $gradient-disabled;
+            opacity: 0.8;
         }
     }
 

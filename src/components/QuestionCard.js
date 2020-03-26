@@ -33,19 +33,32 @@ const QuestionCard = props => {
                 <button className="question-card__confirm-btn" onClick={props.onConfirm}>
                     Zatwierdź
                 </button>
-                <button className="question-card__confirm-btn question-card__confirm-btn--delete">
+                <button
+                    onClick={props.onDiscard}
+                    className="question-card__confirm-btn question-card__confirm-btn--delete"
+                >
                     Odrzuć
                 </button>
             </div>
         );
     }
 
+    let discardedLabel = null;
+    if (props.wasDiscarded)
+        discardedLabel = <div className="question-card__discarded">Odrzucono</div>;
+
     return (
         <div className="question-card">
             {author}
-            <h2 className="question-card__title">
+            <h2
+                className={`question-card__title ${
+                    props.wasDiscarded ? 'question-card__title--discarded' : ''
+                }`}
+            >
                 {props.number ? props.number + '. ' : null}
-                {props.question}
+                {props.question.length
+                    ? props.question[0].toUpperCase() + props.question.slice(1)
+                    : '---'}
             </h2>
             <p className="question-card__answer">{props.answer}</p>
             <div className="question-card__key-words-title">Słowa kluczowe:</div>
@@ -65,6 +78,7 @@ const QuestionCard = props => {
             </div>
             {props.isDeletable ? editButtons : null}
             {confirmBtns}
+            {discardedLabel}
         </div>
     );
 };

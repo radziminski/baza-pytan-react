@@ -13,12 +13,16 @@
         color: rgba($color-grey, 0.9);
         font-size: 1.8rem;
         font-weight: 500;
-        margin-right: 4rem;
+        margin-right: 4.1rem;
         cursor: pointer;
         transition: color 0.2s;
 
+        @include respond(small-deskt) {
+            margin-right: 3rem;
+            font-size: 1.6rem;
+        }
         @include respond(tab-land) {
-            margin-right: 2.5rem;
+            margin-right: 2.4rem;
         }
         @include respond(tab-port) {
             margin-right: 1.5rem;

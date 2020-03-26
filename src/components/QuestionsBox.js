@@ -13,6 +13,19 @@ import {
     createReviewQuestion,
     updateQuestion
 } from '../actions/questionActions';
+import Modal from 'react-modal';
+import { FiAlertTriangle } from 'react-icons/fi';
+
+const customStyles = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)'
+    }
+};
 
 export class QuestionsBox extends Component {
     defaultQuestionsPerPage = 4;
@@ -24,7 +37,9 @@ export class QuestionsBox extends Component {
         numOfQuestions: this.defaultQuestionsPerPage,
         type: 'public',
         editedPosition: null,
-        editMode: false
+        editMode: false,
+        showModal: false,
+        deletedId: null
     };
 
     // COMPONENT LIFECYCLE
@@ -45,6 +60,15 @@ export class QuestionsBox extends Component {
                 this.setState({ isFiltering: this.props.isFetching });
         }
     }
+
+    // MODAL
+    onShowModal = id => {
+        this.setState({ showModal: true, deletedId: id });
+    };
+
+    onCloseModal = () => {
+        this.setState({ showModal: false, deletedId: null });
+    };
 
     // FETCHING QUESTIONS
 
@@ -90,7 +114,10 @@ export class QuestionsBox extends Component {
         if (this.state.type === 'private') {
             !id
                 ? this.props.createReviewQuestion(question, this.props.user)
-                : this.props.updateQuestion(id, 'reviewQuestions', question);
+                : this.props.updateQuestion(id, 'reviewQuestions', {
+                      ...question,
+                      wasDiscarded: false
+                  });
         } else if (this.state.type === 'review') {
             this.props.updateQuestion(id, 'reviewQuestions', question);
         } else {
@@ -103,6 +130,7 @@ export class QuestionsBox extends Component {
     };
 
     onDeleteQuestion = id => {
+        console.log(id);
         switch (this.state.type) {
             case 'private':
                 this.props.deleteQuestion(id, 'reviewQuestions');
@@ -115,6 +143,7 @@ export class QuestionsBox extends Component {
                 if (!this.props.isPublisher) return;
                 this.props.deleteQuestion(id, 'publicQuestions');
         }
+        this.onCloseModal();
     };
 
     onEditedQuestion = index => {
@@ -130,12 +159,22 @@ export class QuestionsBox extends Component {
 
     onConfirmQuestion = id => {
         if (!this.props.user) {
-            console.error('Cannot add public question if not a reviewr!');
+            console.error('Cannot add public question if not a reviewer!');
             return;
         }
         const question = this.props.questions.find(el => el.id === id);
         this.props.deleteQuestion(id, 'reviewQuestions');
         this.props.createPublicQuestion(question, this.props.user, false);
+        this.onEndAddQuestion();
+        this.resetEditingQuestion();
+    };
+
+    onDiscardQuestion = id => {
+        if (!this.props.user) {
+            console.error('Cannot add public question if not a reviewer!');
+            return;
+        }
+        this.props.updateQuestion(id, 'reviewQuestions', { wasDiscarded: true });
         this.onEndAddQuestion();
         this.resetEditingQuestion();
     };
@@ -211,7 +250,7 @@ export class QuestionsBox extends Component {
         let questionsRender = (
             <Questions
                 questions={questionsToRender}
-                onDeleteQuestion={this.onDeleteQuestion}
+                onDeleteQuestion={this.onShowModal}
                 onEditQuestion={this.onEditedQuestion}
                 showLoader={this.state.isFiltering}
                 extended={this.props.type === 'review'}
@@ -222,6 +261,13 @@ export class QuestionsBox extends Component {
                               console.error('Cant confirm question if not in reviews mode');
                           }
                 }
+                onDiscardQuestion={
+                    this.props.type === 'review'
+                        ? this.onDiscardQuestion
+                        : () => {
+                              console.error('Cant discard question if not in reviews mode');
+                          }
+                }
                 type={this.props.type}
             />
         );
@@ -229,7 +275,7 @@ export class QuestionsBox extends Component {
             questionsRender = (
                 <Questions
                     questions={questionsToRender}
-                    onDeleteQuestion={this.onDeleteQuestion}
+                    onDeleteQuestion={this.onShowModal}
                     onEditQuestion={this.onEditedQuestion}
                     showLoader={this.state.isFiltering}
                     editedPosition={this.state.editedPosition}
@@ -243,6 +289,13 @@ export class QuestionsBox extends Component {
                             ? this.onConfirmQuestion
                             : () => {
                                   console.error('Cant confirm question if not in reviews mode');
+                              }
+                    }
+                    onDiscardQuestion={
+                        this.props.type === 'review'
+                            ? this.onDiscardQuestion
+                            : () => {
+                                  console.error('Cant discard question if not in reviews mode');
                               }
                     }
                     type={this.props.type}
@@ -315,6 +368,33 @@ export class QuestionsBox extends Component {
                 {questionsRender}
                 {addQuestionCard}
                 {btns}
+
+                <Modal
+                    isOpen={this.state.showModal}
+                    style={customStyles}
+                    contentLabel="Example Modal"
+                    overlayClassName="modal__overlay"
+                    onRequestClose={this.onCloseModal}
+                >
+                    <div className="modal__window">
+                        <div className="modal__icon-box">
+                            <FiAlertTriangle className="modal__icon" />
+                        </div>
+                        <h2 className="modal__msg">Czy na pewno chcesz usunąć pytanie?</h2>
+                        <h3 className="modal__msg--small">Tej operacji nie można cofnąć.</h3>
+                        <div className="modal__btns">
+                            <Button
+                                types={['confirm', 'short']}
+                                onClick={() => this.onDeleteQuestion(this.state.deletedId)}
+                            >
+                                Tak
+                            </Button>
+                            <Button types={['delete', 'short']} onClick={this.onCloseModal}>
+                                Anuluj
+                            </Button>
+                        </div>
+                    </div>
+                </Modal>
             </Fragment>
         );
     }

@@ -15,8 +15,7 @@ const Questions = props => {
         msg = (
             <h3 className="u-centered" style={{ width: '90%', maxWidth: '90rem' }}>
                 Nie znaleziono żadnych pytań. Jeśli dodałeś/aś pytanie, i nie możesz go znaleźć,
-                prawdopodobnie zostało usunięte lub zatwierdzone przez recenzenta - być może
-                znajduję się w puli wszystkich pytań.{' '}
+                prawdopodobnie zostało usunięte lub zatwierdzone przez recenzenta.{' '}
             </h3>
         );
 
@@ -42,6 +41,7 @@ const Questions = props => {
                           );
                       }
                       if (props.extended) {
+                          if (el.wasDiscarded) return null;
                           return (
                               <QuestionCard
                                   key={el.id}
@@ -52,6 +52,7 @@ const Questions = props => {
                                   onDelete={() => props.onDeleteQuestion(el.id)}
                                   onEdit={() => props.onEditQuestion(index)}
                                   onConfirm={() => props.onConfirmQuestion(el.id)}
+                                  onDiscard={() => props.onDiscardQuestion(el.id)}
                                   isDeletable={el.isDeletable !== false}
                                   author={el.creator}
                                   number={el.number}
@@ -68,6 +69,7 @@ const Questions = props => {
                               onDelete={() => props.onDeleteQuestion(el.id)}
                               onEdit={() => props.onEditQuestion(index)}
                               isDeletable={el.isDeletable !== false}
+                              wasDiscarded={el.wasDiscarded}
                               number={el.number}
                           />
                       );

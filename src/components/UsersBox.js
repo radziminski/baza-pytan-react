@@ -236,7 +236,7 @@ export class UsersBox extends Component {
                     onRequestClose={this.onCloseModal}
                 >
                     <div className="modal__window">
-                        <h2>{this.state.modalMessage}</h2>
+                        <h2 className="modal__msg modal__msg--black">{this.state.modalMessage}</h2>
                         <div className="modal__btns">
                             <Button
                                 type="short"

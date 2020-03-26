@@ -7,11 +7,18 @@
     transform: translate(-50%, -50%);
     background-color: papayawhip;
     z-index: 700;
+
+    &__icon {
+        font-size: 4rem;
+        color: $color-red-flat;
+    }
+
     &__window {
-        width: 70vw;
-        height: 60vh;
-        max-width: 100rem;
-        max-height: 20rem;
+        // width: 70vw;
+        // height: 60vh;
+        // max-width: 100rem;
+        // max-height: 20rem;
+        padding: 2rem 6rem;
         text-align: center;
         display: flex;
         flex-direction: column;
@@ -40,5 +47,20 @@
         right: 0;
         bottom: 0;
         background-color: rgba($color-black, 0.4);
+    }
+
+    &__msg {
+        font-size: 3rem;
+        font-weight: 600;
+        color: $color-red-flat;
+
+        &--small {
+            font-size: 2rem;
+            font-weight: 400;
+        }
+        &--black {
+            color: $color-grey;
+            font-size: 2.6rem;
+        }
     }
 }
