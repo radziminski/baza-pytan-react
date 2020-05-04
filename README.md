@@ -11,4 +11,4 @@ Aby uruchomić aplikację użyj
 ```bash
 npm start
 ```
-Lub przejdź na stronę [baza-pytan-react.netlify.com](baza-pytan-react.netlify.com).
+Lub przejdź na stronę [baza-pytan-react.netlify.com](https://baza-pytan-react.netlify.com).
