@@ -6,3 +6,9 @@ Instalacja aplikacji opiera się na menadżerze pakietów [npm](https://www.npmj
 ```bash
 npm install
 ```
+## Uruchamianie
+Aby uruchomić aplikację użyj 
+```bash
+npm start
+```
+Lub przejdź na stronę [baza-pytan-react.netlify.com](baza-pytan-react.netlify.com).
