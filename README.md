@@ -47,9 +47,9 @@ Administrator może również mianować innych administratorów, którzy mają w
 ![admin](https://i.ibb.co/1JRC5xF/baza-admin.jpg)
 
 ##  Użyte technologie
-- HTML5 i CSS
-- SASS preprocessor
-- React (biblioteka Javascript)
+- React (biblioteka Javascript) [Frontend]
+- Firebase [Backend]
+- SCSS preprocessor
 - Redux
 - Webpack
 - Deployed on [Netlify](https://baza-pytan-covid.netlify.app/)
