@@ -4,6 +4,10 @@
     justify-content: center;
     align-items: center;
 
+    @include respond(small-phone) {
+        width: 18rem;
+    }
+
     &__img {
         background-image: linear-gradient(to right bottom, $color-primary, $color-secondary);
         width: 5rem;
@@ -11,6 +15,11 @@
         border-radius: 50%;
         position: relative;
         margin-right: 1.5rem;
+
+        @include respond(small-phone) {
+            width: 4.5rem;
+            height: 4.5rem;
+        }
     }
 
     &__icon {
@@ -27,5 +36,9 @@
         font-family: 'Lato', 'Arial', sans-serif;
         font-weight: 600;
         color: $color-black;
+
+        @include respond(small-phone) {
+            font-size: 2.3rem;
+        }
     }
 }

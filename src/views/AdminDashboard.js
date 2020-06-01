@@ -4,7 +4,7 @@ import UsersBox from '../components/UsersBox';
 
 export class AdminDashboard extends Component {
     state = {
-        users: []
+        users: [],
     };
 
     componentDidMount() {
@@ -21,8 +21,8 @@ export class AdminDashboard extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    isAdmin: state.auth.isAdmin
+const mapStateToProps = (state) => ({
+    isAdmin: state.auth.isAdmin,
 });
 
 export default connect(mapStateToProps, {})(AdminDashboard);
