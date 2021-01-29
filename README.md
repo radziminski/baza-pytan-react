@@ -54,5 +54,3 @@ Administrator może również mianować innych administratorów, którzy mają w
 - Webpack
 - Deployed on [Netlify](https://baza-pytan-covid.netlify.app/)
 
-## License
-Copyright by Jan Radzimiński. All rights reserved.
